@@ -14,12 +14,18 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
+    private static final AppState STATE = new AppState();
 
     @Override
     public void start(Stage stage) throws IOException {
+        stage.setTitle("Restaurant App");
         scene = new Scene(loadFXML("primary"), 640, 480);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public static AppState getState() {
+        return STATE;
     }
 
     static void setRoot(String fxml) throws IOException {
