@@ -3,92 +3,370 @@ package com.javaproject;
 import com.javaproject.model.CartLine;
 import com.javaproject.model.MenuItem;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.function.Predicate;
 
 public class PrimaryController {
 
     @FXML
-    private ListView<MenuItem> menuListView;
+    private TextField searchField;
 
     @FXML
-    private Label itemNameLabel;
+    private ScrollPane menuScroll;
 
     @FXML
-    private Label itemDescriptionLabel;
+    private Label cartCountLabel;
 
     @FXML
-    private Label itemPriceLabel;
+    private FlowPane specialsPane;
 
     @FXML
-    private Button addToCartButton;
+    private FlowPane mainsPane;
 
     @FXML
-    private ListView<CartLine> cartListView;
+    private Button tabPopular;
 
     @FXML
-    private Button removeOneButton;
+    private Button tabStarters;
 
     @FXML
-    private Label totalLabel;
+    private Button tabMains;
+
+    @FXML
+    private Button tabDesserts;
+
+    @FXML
+    private Button tabDrinks;
+
+    @FXML
+    private ToggleButton chipAll;
+
+    @FXML
+    private ToggleButton chipVegetarian;
+
+    @FXML
+    private ToggleButton chipVegan;
+
+    @FXML
+    private ToggleButton chipGlutenFree;
+
+    @FXML
+    private ToggleButton chipSpicy;
+
+    private String activeCategory = "Popular";
 
     @FXML
     public void initialize() {
-        menuListView.getItems().setAll(App.getState().getMenuItems());
-        cartListView.setItems(App.getState().getCartLines());
+        chipAll.setSelected(true);
 
-        addToCartButton.setDisable(true);
-        removeOneButton.setDisable(true);
+        searchField.textProperty().addListener((obs, oldText, newText) -> refreshCards());
 
-        menuListView.getSelectionModel().selectedItemProperty().addListener((obs, oldItem, newItem) -> {
-            if (newItem == null) {
-                itemNameLabel.setText("Select an item");
-                itemDescriptionLabel.setText("");
-                itemPriceLabel.setText("");
-                addToCartButton.setDisable(true);
-                return;
+        App.getState().getCartLines().addListener((javafx.collections.ListChangeListener<CartLine>) change -> updateCartCount());
+        updateCartCount();
+        refreshCards();
+    }
+
+    @FXML
+    private void goToCheckout() throws IOException {
+        App.setRoot("checkout");
+    }
+
+    @FXML
+    private void goToProfile() throws IOException {
+        App.setRoot(App.getState().isAuthenticated() ? "profile" : "login");
+    }
+
+    @FXML
+    private void goToAbout() throws IOException {
+        App.setRoot("about");
+    }
+
+    @FXML
+    private void goToContact() throws IOException {
+        App.setRoot("contact");
+    }
+
+    @FXML
+    private void goToLocation() throws IOException {
+        App.setRoot("location");
+    }
+
+    @FXML
+    private void goToReservation() throws IOException {
+        // For now, we can redirect to a contact page or show an alert.
+        // Since the user asked for "Book a Table" to work, let's assume a reservation page.
+        // If it doesn't exist yet, we'll create it.
+        App.setRoot("contact"); 
+    }
+
+    @FXML
+    private void scrollToSpecials() {
+        menuScroll.setVvalue(0.35);
+    }
+
+    @FXML
+    private void selectPopular() {
+        activeCategory = "Popular";
+        updateTabStyles();
+        refreshCards();
+    }
+
+    @FXML
+    private void selectStarters() {
+        activeCategory = "Starters";
+        updateTabStyles();
+        refreshCards();
+    }
+
+    @FXML
+    private void selectMains() {
+        activeCategory = "Mains";
+        updateTabStyles();
+        refreshCards();
+    }
+
+    @FXML
+    private void selectDesserts() {
+        activeCategory = "Desserts";
+        updateTabStyles();
+        refreshCards();
+    }
+
+    @FXML
+    private void selectDrinks() {
+        activeCategory = "Drinks";
+        updateTabStyles();
+        refreshCards();
+    }
+
+    @FXML
+    private void applyFilters() {
+        // Make "All Filters" behave like a simple reset chip.
+        boolean anySpecific = chipVegetarian.isSelected() || chipVegan.isSelected() || chipGlutenFree.isSelected() || chipSpicy.isSelected();
+
+        if (chipAll.isSelected()) {
+            chipVegetarian.setSelected(false);
+            chipVegan.setSelected(false);
+            chipGlutenFree.setSelected(false);
+            chipSpicy.setSelected(false);
+        } else if (anySpecific) {
+            chipAll.setSelected(false);
+        } else {
+            chipAll.setSelected(true);
+        }
+        refreshCards();
+    }
+
+    @FXML
+    private void showAll() {
+        // In this beginner version, "View All" just resets to Popular.
+        selectPopular();
+        menuScroll.setVvalue(0.35);
+    }
+
+    private void refreshCards() {
+        specialsPane.getChildren().setAll(buildCards(true));
+        mainsPane.getChildren().setAll(buildCards(false));
+    }
+
+    private List<Node> buildCards(boolean chefSpecials) {
+        List<Node> nodes = new ArrayList<>();
+        for (MenuItem item : App.getState().getMenuItems()) {
+            if (item.isChefSpecial() != chefSpecials) {
+                continue;
             }
 
-            itemNameLabel.setText(newItem.getName());
-            itemDescriptionLabel.setText(newItem.getDescription());
-            itemPriceLabel.setText(String.format("Price: $%.2f", newItem.getPrice()));
-            addToCartButton.setDisable(false);
+            if (!matchesActiveCategory(item)) {
+                continue;
+            }
+
+            if (!matchesSearch(item)) {
+                continue;
+            }
+
+            if (!matchesChips(item)) {
+                continue;
+            }
+
+            nodes.add(createCard(item));
+        }
+        return nodes;
+    }
+
+    private boolean matchesActiveCategory(MenuItem item) {
+        if ("Popular".equals(activeCategory)) {
+            return true;
+        }
+        return item.getCategory().equals(activeCategory);
+    }
+
+    private boolean matchesSearch(MenuItem item) {
+        String q = searchField.getText();
+        if (q == null || q.isBlank()) {
+            return true;
+        }
+        String needle = q.toLowerCase(Locale.ROOT).trim();
+        return item.getName().toLowerCase(Locale.ROOT).contains(needle)
+                || item.getDescription().toLowerCase(Locale.ROOT).contains(needle);
+    }
+
+    private boolean matchesChips(MenuItem item) {
+        if (chipAll.isSelected()) {
+            return true;
+        }
+
+        List<Predicate<MenuItem>> preds = new ArrayList<>();
+        if (chipVegetarian.isSelected()) {
+            preds.add(i -> "Vegetarian".equals(i.getLabel()));
+        }
+        if (chipVegan.isSelected()) {
+            preds.add(i -> "Vegan".equals(i.getLabel()));
+        }
+        if (chipGlutenFree.isSelected()) {
+            preds.add(i -> "Gluten-Free".equals(i.getLabel()));
+        }
+        if (chipSpicy.isSelected()) {
+            preds.add(i -> "Spicy".equals(i.getLabel()));
+        }
+
+        for (Predicate<MenuItem> p : preds) {
+            if (!p.test(item)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private Node createCard(MenuItem item) {
+        VBox card = new VBox(8);
+        card.getStyleClass().add("menu-card");
+        card.setPadding(new Insets(10));
+        card.setPrefWidth(210);
+        card.setOnMouseClicked(e -> openMealDetails(item));
+
+        StackPane image = new StackPane();
+        Rectangle rect = new Rectangle(190, 110);
+        rect.getStyleClass().add("menu-card-image");
+        rect.setArcWidth(14);
+        rect.setArcHeight(14);
+        image.getChildren().add(rect);
+
+        Label labelPill = new Label(item.getLabel());
+        labelPill.getStyleClass().addAll("pill", pillClassFor(item.getLabel()));
+        StackPane.setMargin(labelPill, new Insets(8, 0, 0, 8));
+        image.getChildren().add(labelPill);
+
+        HBox ratingBox = new HBox(4);
+        ratingBox.getStyleClass().add("rating-badge");
+        Label star = new Label("★");
+        star.getStyleClass().add("rating-star");
+        Label ratingValue = new Label(String.format("%.1f", item.getRating()));
+        ratingValue.getStyleClass().add("rating-value");
+        ratingBox.getChildren().addAll(star, ratingValue);
+        StackPane.setMargin(ratingBox, new Insets(8, 8, 0, 0));
+        StackPane.setAlignment(ratingBox, javafx.geometry.Pos.TOP_RIGHT);
+        image.getChildren().add(ratingBox);
+
+        Label name = new Label(item.getName());
+        name.getStyleClass().add("menu-card-title");
+
+        Label desc = new Label(item.getDescription());
+        desc.getStyleClass().add("muted");
+        desc.setWrapText(true);
+
+        Label price = new Label(String.format("$%.2f", item.getPrice()));
+        price.getStyleClass().add("menu-card-price");
+
+        Button add = new Button("Add");
+        add.getStyleClass().add("add-button");
+        add.setOnAction(e -> {
+            App.getState().addToCart(item);
+            updateCartCount();
         });
 
-        cartListView.getSelectionModel().selectedItemProperty().addListener((obs, oldLine, newLine) ->
-                removeOneButton.setDisable(newLine == null)
-        );
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        updateTotal();
-        App.getState().getCartLines().addListener((javafx.collections.ListChangeListener<CartLine>) change -> updateTotal());
+        HBox bottom = new HBox(10);
+        bottom.getChildren().addAll(price, spacer, add);
+        bottom.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+        card.getChildren().addAll(image, name, desc, bottom);
+        return card;
     }
 
-    @FXML
-    private void addSelectedItemToCart() {
-        MenuItem selected = menuListView.getSelectionModel().getSelectedItem();
-        if (selected == null) {
+    private void openMealDetails(MenuItem item) {
+        try {
+            App.getState().setSelectedMenuItem(item);
+            App.setRoot("meal");
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    private String pillClassFor(String label) {
+        if (label == null) {
+            return "pill-neutral";
+        }
+
+        return switch (label) {
+            case "Spicy" -> "pill-spicy";
+            case "Vegan" -> "pill-vegan";
+            case "Vegetarian" -> "pill-veg";
+            case "Gluten-Free" -> "pill-gf";
+            default -> "pill-neutral";
+        };
+    }
+
+    private void updateCartCount() {
+        int count = 0;
+        for (CartLine line : App.getState().getCartLines()) {
+            count += line.getQuantity();
+        }
+        cartCountLabel.setText(String.valueOf(count));
+    }
+
+    private void updateTabStyles() {
+        setTabActive(tabPopular, "Popular".equals(activeCategory));
+        setTabActive(tabStarters, "Starters".equals(activeCategory));
+        setTabActive(tabMains, "Mains".equals(activeCategory));
+        setTabActive(tabDesserts, "Desserts".equals(activeCategory));
+        setTabActive(tabDrinks, "Drinks".equals(activeCategory));
+    }
+
+    private void setTabActive(Button tab, boolean active) {
+        if (tab == null) {
             return;
         }
-        App.getState().addToCart(selected);
-        updateTotal();
-    }
 
-    @FXML
-    private void removeSelectedCartLine() {
-        CartLine selected = cartListView.getSelectionModel().getSelectedItem();
-        App.getState().removeOneFromCart(selected);
-        updateTotal();
-    }
+        if (!tab.getStyleClass().contains("tabtext")) {
+            tab.getStyleClass().add("tabtext");
+        }
 
-    private void updateTotal() {
-        totalLabel.setText(String.format("Total: $%.2f", App.getState().getCartTotal()));
-    }
-
-    @FXML
-    private void switchToSecondary() throws IOException {
-        App.setRoot("secondary");
+        if (active) {
+            if (!tab.getStyleClass().contains("tab-active")) {
+                tab.getStyleClass().add("tab-active");
+            }
+        } else {
+            tab.getStyleClass().remove("tab-active");
+        }
     }
 }

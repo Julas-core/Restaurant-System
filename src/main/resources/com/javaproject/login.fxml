@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.LoginController" styleClass="page">
+
+    <center>
+        <HBox prefHeight="720" prefWidth="1200">
+            <!-- Left hero -->
+            <StackPane HBox.hgrow="ALWAYS" styleClass="auth-hero">
+                <Rectangle width="800" height="720" styleClass="auth-hero-rect" />
+                <VBox spacing="10" maxWidth="520" styleClass="auth-hero-copy">
+                    <Label text="Master the Art of Dining" styleClass="auth-hero-title" />
+                    <Label text="Sign in to manage your orders and access your account." styleClass="auth-hero-subtitle" wrapText="true" />
+                </VBox>
+            </StackPane>
+
+            <!-- Right form -->
+            <VBox spacing="14" prefWidth="520" styleClass="auth-panel">
+                <padding>
+                    <Insets top="40" right="40" bottom="40" left="40" />
+                </padding>
+
+                <Label text="Welcome Back" styleClass="section-title" />
+                <Label text="Please sign in to continue." styleClass="muted" />
+
+                <VBox spacing="8" styleClass="card">
+                    <Label text="Email / Username" styleClass="muted" />
+                    <TextField fx:id="usernameField" promptText="name@example.com" styleClass="search" />
+
+                    <HBox>
+                        <Label text="Password" styleClass="muted" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Hyperlink text="Forgot password?" disable="true" />
+                    </HBox>
+                    <PasswordField fx:id="passwordField" promptText="••••••••" styleClass="search" />
+
+                    <Button text="Sign In" styleClass="primary-button" onAction="#login" />
+                </VBox>
+
+                <HBox spacing="6" alignment="CENTER_LEFT">
+                    <Label text="New here?" styleClass="muted" />
+                    <Button text="Create an account" styleClass="link-button" onAction="#goRegister" />
+                </HBox>
+
+                <Region VBox.vgrow="ALWAYS" />
+
+                <Button text="Back" styleClass="secondary-button" onAction="#goBack" />
+            </VBox>
+        </HBox>
+    </center>
+
+</BorderPane>

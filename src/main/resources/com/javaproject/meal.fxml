@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.MealController" styleClass="page">
+
+    <!-- Top Nav -->
+    <top>
+        <BorderPane styleClass="topbar">
+            <padding>
+                <Insets top="12" right="18" bottom="12" left="18" />
+            </padding>
+
+            <left>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="🍔" styleClass="brand-mark" />
+                    <Label text="Gourmet Burger Kitchen" styleClass="brand" />
+                    <HBox spacing="16" alignment="CENTER_LEFT" styleClass="nav-links">
+                        <Label text="Menu" styleClass="nav-link" />
+                        <Label text="Locations" styleClass="nav-link" />
+                        <Label text="About Us" styleClass="nav-link" />
+                    </HBox>
+                </HBox>
+            </left>
+
+            <center>
+                <TextField promptText="Search..." styleClass="search" />
+            </center>
+
+            <right>
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="🛒" styleClass="icon-button" onAction="#goToCheckout" />
+                    <Button text="Sign In" styleClass="primary-button" onAction="#goToProfile" />
+                </HBox>
+            </right>
+        </BorderPane>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="detail-scroll">
+            <content>
+                <VBox spacing="16">
+                    <padding>
+                        <Insets top="16" right="18" bottom="18" left="18" />
+                    </padding>
+
+                    <!-- Breadcrumbs -->
+                    <HBox spacing="6" alignment="CENTER_LEFT">
+                        <Label text="Menu" styleClass="breadcrumb" />
+                        <Label text=">" styleClass="breadcrumb" />
+                        <Label text="Burgers" styleClass="breadcrumb" />
+                        <Label text=">" styleClass="breadcrumb" />
+                        <Label text="Signature Spicy Chicken" styleClass="breadcrumb-active" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button text="Back" onAction="#goBackToMenu" styleClass="link-button" />
+                    </HBox>
+
+                    <!-- Main content row -->
+                    <HBox spacing="28">
+
+                        <!-- Left: image + thumbnails -->
+                        <VBox spacing="12" prefWidth="520">
+                            <StackPane styleClass="detail-image">
+                                <Rectangle width="520" height="320" arcWidth="16" arcHeight="16" styleClass="detail-image-rect" />
+                                <HBox spacing="8" StackPane.alignment="TOP_LEFT">
+                                    <Label text="BEST SELLER" styleClass="badge" />
+                                    <Label text="SPICY" styleClass="badge badge-spicy" />
+                                </HBox>
+                                <StackPane.margin>
+                                    <Insets top="14" right="0" bottom="0" left="14" />
+                                </StackPane.margin>
+                            </StackPane>
+
+                            <HBox spacing="10">
+                                <StackPane styleClass="thumb thumb-active">
+                                    <Rectangle width="72" height="52" arcWidth="10" arcHeight="10" styleClass="thumb-rect" />
+                                </StackPane>
+                                <StackPane styleClass="thumb">
+                                    <Rectangle width="72" height="52" arcWidth="10" arcHeight="10" styleClass="thumb-rect" />
+                                </StackPane>
+                                <StackPane styleClass="thumb">
+                                    <Rectangle width="72" height="52" arcWidth="10" arcHeight="10" styleClass="thumb-rect" />
+                                </StackPane>
+                            </HBox>
+                        </VBox>
+
+                        <!-- Right: details + customization -->
+                        <VBox spacing="12" prefWidth="420" styleClass="detail-panel">
+                            <Label fx:id="titleLabel" text="Signature Spicy Chicken Burger" styleClass="detail-title" />
+
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label fx:id="priceLabel" text="\$14.50" styleClass="detail-price" />
+                                <Label text="★" styleClass="rating-star" />
+                                <Label fx:id="ratingLabel" text="4.8" styleClass="detail-rating" />
+                                <Label fx:id="reviewsLabel" text="(124 reviews)" styleClass="muted" />
+                            </HBox>
+
+                            <Label fx:id="descriptionLabel" text="Crispy fried chicken breast, spicy mayo, house-made pickles, lettuce, and melted cheddar on a toasted brioche bun." styleClass="muted" wrapText="true" />
+
+                            <Separator />
+
+                            <HBox>
+                                <Label text="Choose Size" styleClass="detail-section" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label text="Required" styleClass="required" />
+                            </HBox>
+
+                            <VBox spacing="10">
+                                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="option-row option-selected">
+                                    <RadioButton fx:id="sizeRegular" text="Regular" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                </HBox>
+                                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="option-row">
+                                    <RadioButton fx:id="sizeLarge" text="Large" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label text="+ \$2.00" styleClass="muted" />
+                                </HBox>
+                            </VBox>
+
+                            <Label text="Add Toppings" styleClass="detail-section" />
+                            <VBox spacing="10">
+                                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="topping-row">
+                                    <CheckBox fx:id="toppingCheese" text="Extra Cheese" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label text="+ \$1.00" styleClass="muted" />
+                                </HBox>
+                                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="topping-row">
+                                    <CheckBox fx:id="toppingBacon" text="Crispy Bacon" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label text="+ \$1.50" styleClass="muted" />
+                                </HBox>
+                                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="topping-row">
+                                    <CheckBox fx:id="toppingAvocado" text="Avocado Slices" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <Label text="+ \$2.00" styleClass="muted" />
+                                </HBox>
+                            </VBox>
+
+                            <Label text="Special Instructions" styleClass="detail-section" />
+                            <TextArea fx:id="instructionsArea" promptText="Add notes for allergies or specific requests (e.g., no pickles, sauce on side)..." prefRowCount="3" wrapText="true" />
+                        </VBox>
+                    </HBox>
+
+                    <!-- Spacer so bottom bar doesn't cover content -->
+                    <Region prefHeight="70" />
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+    <!-- Bottom sticky order bar -->
+    <bottom>
+        <HBox spacing="16" alignment="CENTER_LEFT" styleClass="order-bar">
+            <padding>
+                <Insets top="14" right="18" bottom="14" left="18" />
+            </padding>
+
+            <VBox spacing="2">
+                <Label text="TOTAL PRICE" styleClass="kicker" />
+                <HBox spacing="8" alignment="BASELINE_LEFT">
+                    <Label fx:id="bottomTotalPriceLabel" text="\$14.50" styleClass="detail-price" />
+                    <Label fx:id="bottomUnitPriceLabel" text="\$14.50" styleClass="muted" />
+                </HBox>
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <HBox spacing="10" alignment="CENTER" styleClass="qty-stepper">
+                <Button text="−" onAction="#decrementQty" styleClass="stepper-btn" />
+                <Label fx:id="qtyLabel" text="1" styleClass="qty" />
+                <Button text="+" onAction="#incrementQty" styleClass="stepper-btn" />
+            </HBox>
+
+            <Button text="Add to Order" onAction="#addToOrder" styleClass="cta" />
+        </HBox>
+    </bottom>
+
+</BorderPane>

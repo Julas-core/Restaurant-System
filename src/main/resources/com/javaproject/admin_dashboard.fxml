@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import java.lang.String?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.AdminDashboardController" styleClass="page">
+
+    <!-- Sidebar -->
+    <left>
+        <VBox spacing="5" prefWidth="250" styleClass="sidebar">
+            <padding>
+                <Insets top="20" right="10" bottom="20" left="10" />
+            </padding>
+            
+            <HBox alignment="CENTER_LEFT" spacing="10">
+                <padding>
+                    <Insets bottom="30" left="15" />
+                </padding>
+                <Label text="🍽" style="-fx-font-size: 24px;" />
+                <Label text="RestoAdmin" styleClass="brand" />
+            </HBox>
+
+            <Button text="Dashboard" styleClass="sidebar-item, sidebar-active" maxWidth="Infinity" onAction="#goDashboard" />
+            <Button text="Orders" styleClass="sidebar-item" maxWidth="Infinity" onAction="#goOrders" />
+            <Button text="Menu Management" styleClass="sidebar-item" maxWidth="Infinity" onAction="#goMenu" />
+            <Button text="Customers" styleClass="sidebar-item" maxWidth="Infinity" onAction="#goUsers" />
+            <Button text="Feedback" styleClass="sidebar-item" maxWidth="Infinity" onAction="#goFeedback" />
+            
+            <Region VBox.vgrow="ALWAYS" />
+            
+            <Button text="Settings" styleClass="sidebar-item" maxWidth="Infinity" />
+            <Button text="Logout" styleClass="sidebar-item" maxWidth="Infinity" onAction="#doLogout" />
+        </VBox>
+    </left>
+
+    <!-- Main Content -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <content>
+                <VBox spacing="25">
+                    <padding>
+                        <Insets top="25" right="30" bottom="30" left="30" />
+                    </padding>
+
+                    <!-- Top Bar -->
+                    <HBox alignment="CENTER_LEFT" spacing="20">
+                        <VBox>
+                            <Label text="Welcome back, Manager" styleClass="section-title" />
+                            <Label text="Here is what's happening with your restaurant today." styleClass="muted" />
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS" />
+                        <TextField promptText="Search..." styleClass="search" />
+                        <Button text="New Order" styleClass="primary-button" />
+                        <Circle radius="20" fill="#e0e0e0" />
+                    </HBox>
+
+                    <!-- Stats Cards -->
+                    <HBox spacing="20">
+                        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label text="Total Revenue" styleClass="stat-label" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label text="↗ 12%">
+                                    <styleClass>
+                                        <String fx:value="badge" />
+                                        <String fx:value="badge-success" />
+                                    </styleClass>
+                                </Label>
+                            </HBox>
+                            <Label text="\$1,240.50" styleClass="stat-value" />
+                        </VBox>
+
+                        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label text="Total Orders" styleClass="stat-label" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label text="↗ 5%">
+                                    <styleClass>
+                                        <String fx:value="badge" />
+                                        <String fx:value="badge-success" />
+                                    </styleClass>
+                                </Label>
+                            </HBox>
+                            <Label text="45" styleClass="stat-value" />
+                        </VBox>
+
+                        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label text="Pending Orders" styleClass="stat-label" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Circle radius="4" fill="#f05a28" />
+                            </HBox>
+                            <Label text="3" styleClass="stat-value" />
+                            <Label text="NEEDS ATTENTION" styleClass="kicker" />
+                        </VBox>
+
+                        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT" spacing="10">
+                                <Label text="Average Rating" styleClass="stat-label" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label text="↗ 0.1">
+                                    <styleClass>
+                                        <String fx:value="badge" />
+                                        <String fx:value="badge-success" />
+                                    </styleClass>
+                                </Label>
+                            </HBox>
+                            <Label text="4.8" styleClass="stat-value" />
+                        </VBox>
+                    </HBox>
+
+                    <!-- Chart Section -->
+                    <VBox styleClass="card">
+                        <HBox alignment="CENTER_LEFT">
+                            <Label text="Weekly Revenue Breakdown" styleClass="card-title" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Button text="Last 7 Days" styleClass="secondary-button" />
+                        </HBox>
+                        <LineChart fx:id="revenueChart" minHeight="300" legendVisible="false">
+                            <xAxis>
+                                <CategoryAxis label="Day" />
+                            </xAxis>
+                            <yAxis>
+                                <NumberAxis label="Revenue" />
+                            </yAxis>
+                        </LineChart>
+                    </VBox>
+
+                    <!-- Bottom Section -->
+                    <HBox spacing="20">
+                        <!-- Popular Items -->
+                        <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="15">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Popular Items" styleClass="card-title" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Button text="View All" styleClass="link-button" />
+                            </HBox>
+                            
+                            <VBox fx:id="popularItemsBox" spacing="10" />
+                        </VBox>
+
+                        <!-- Recent Feedback -->
+                        <VBox styleClass="card" HBox.hgrow="ALWAYS" spacing="15">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Recent Feedback" styleClass="card-title" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Button text="View All" styleClass="link-button" />
+                            </HBox>
+                            
+                            <VBox fx:id="recentFeedbackBox" spacing="10" />
+                        </VBox>
+                    </HBox>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

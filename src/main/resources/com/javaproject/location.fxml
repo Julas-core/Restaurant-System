@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.shape.Rectangle?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.PageController" styleClass="page">
+
+    <top>
+        <BorderPane styleClass="topbar">
+            <padding>
+                <Insets top="12" right="18" bottom="12" left="18" />
+            </padding>
+            <left>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="◆" styleClass="brand-mark" />
+                    <Label text="Gourmet Haven" styleClass="brand" />
+                    <Region prefWidth="20" />
+                    <Button text="Home" styleClass="nav-link" onAction="#goToHome" />
+                    <Button text="Menu" styleClass="nav-link" onAction="#goToMenu" />
+                    <Button text="About" styleClass="nav-link" onAction="#goToAbout" />
+                    <Button text="Contact" styleClass="nav-link" onAction="#goToContact" />
+                    <Button text="Location" styleClass="nav-link, nav-active" onAction="#goToLocation" />
+                </HBox>
+            </left>
+            <right>
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="🛒" styleClass="icon-button" onAction="#goToCheckout" />
+                    <Button text="👤" styleClass="icon-button" onAction="#goToProfile" />
+                </HBox>
+            </right>
+        </BorderPane>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true">
+            <content>
+                <VBox spacing="20" alignment="TOP_CENTER">
+                    <padding>
+                        <Insets top="40" right="40" bottom="40" left="40" />
+                    </padding>
+                    <Label text="Our Location" styleClass="section-title" />
+                    <Label text="Visit us at our flagship restaurant." wrapText="true" maxWidth="600" styleClass="muted" />
+                    
+                    <Rectangle width="600" height="300" arcWidth="14" arcHeight="14" styleClass="map-rect" />
+                    
+                    <VBox spacing="5" alignment="CENTER">
+                        <Label text="Gourmet Haven HQ" styleClass="kicker" />
+                        <Label text="123 Main Street, Addis Ababa" styleClass="muted" />
+                        <Label text="Open Daily: 10 AM - 11 PM" styleClass="muted" />
+                    </VBox>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

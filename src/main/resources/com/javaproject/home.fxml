@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.HomeController" styleClass="page">
+    <top>
+        <BorderPane styleClass="nav-bar">
+            <padding>
+                <Insets top="14" right="18" bottom="14" left="18" />
+            </padding>
+
+            <left>
+                <Label text="Savoria" styleClass="brand" />
+            </left>
+
+            <right>
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="Menu" styleClass="nav-link" onAction="#goToMenu" />
+                    <Button text="About" styleClass="nav-link" />
+                    <Button text="Contact" styleClass="nav-link" />
+                    <Button text="Order Now" styleClass="primary-button" onAction="#goToMenu" />
+                </HBox>
+            </right>
+        </BorderPane>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" styleClass="scroll">
+            <content>
+                <VBox spacing="36">
+                    <padding>
+                        <Insets top="24" right="18" bottom="24" left="18" />
+                    </padding>
+
+                    <!-- Hero -->
+                    <HBox spacing="24" styleClass="hero">
+                        <VBox spacing="14" prefWidth="420" styleClass="hero-left">
+                            <Label text="Taste the\nPassion in\nEvery Bite." styleClass="hero-title" />
+                            <Label text="Fresh ingredients, authentic recipes, delivered to your door.\nExperience fine dining from the comfort of your home." styleClass="hero-subtitle" />
+                            <HBox spacing="12">
+                                <Button text="View Full Menu" styleClass="primary-button" onAction="#goToMenu" />
+                                <Button text="Book a Table" styleClass="secondary-button" />
+                            </HBox>
+                            <Label text="★ ★ ★ ★ ★   1,200+ Happy Customers" styleClass="rating" />
+                        </VBox>
+
+                        <!-- Image placeholder (no external assets) -->
+                        <StackPane styleClass="hero-image" prefWidth="420">
+                            <Rectangle width="360" height="220" arcWidth="18" arcHeight="18" styleClass="image-placeholder" />
+                            <Label text="Food Image" styleClass="image-caption" />
+                        </StackPane>
+                    </HBox>
+
+                    <!-- Favorites -->
+                    <VBox spacing="10">
+                        <HBox alignment="CENTER_LEFT">
+                            <VBox spacing="4">
+                                <Label text="OUR MENU" styleClass="kicker" />
+                                <Label text="Customer Favorites" styleClass="section-title" />
+                            </VBox>
+                            <Button text="See All Menu →" styleClass="link-button" onAction="#goToMenu" />
+                        </HBox>
+
+                        <HBox spacing="14" styleClass="cards">
+                            <VBox spacing="8" styleClass="card">
+                                <Rectangle width="170" height="110" arcWidth="14" arcHeight="14" styleClass="card-image" />
+                                <Label text="Spicy Basil Chicken" styleClass="card-title" />
+                                <Label text="Price: $18.50" styleClass="card-price" />
+                                <Button text="Add to Order" styleClass="card-button" onAction="#addFavorite" userData="Spicy Basil Chicken" />
+                            </VBox>
+
+                            <VBox spacing="8" styleClass="card">
+                                <Rectangle width="170" height="110" arcWidth="14" arcHeight="14" styleClass="card-image" />
+                                <Label text="Truffle Burger" styleClass="card-title" />
+                                <Label text="Price: $16.00" styleClass="card-price" />
+                                <Button text="Add to Order" styleClass="card-button" onAction="#addFavorite" userData="Truffle Burger" />
+                            </VBox>
+
+                            <VBox spacing="8" styleClass="card">
+                                <Rectangle width="170" height="110" arcWidth="14" arcHeight="14" styleClass="card-image" />
+                                <Label text="Seared Salmon" styleClass="card-title" />
+                                <Label text="Price: $24.00" styleClass="card-price" />
+                                <Button text="Add to Order" styleClass="card-button" onAction="#addFavorite" userData="Seared Salmon" />
+                            </VBox>
+
+                            <VBox spacing="8" styleClass="card">
+                                <Rectangle width="170" height="110" arcWidth="14" arcHeight="14" styleClass="card-image" />
+                                <Label text="Garden Pizza" styleClass="card-title" />
+                                <Label text="Price: $15.50" styleClass="card-price" />
+                                <Button text="Add to Order" styleClass="card-button" onAction="#addFavorite" userData="Garden Pizza" />
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Promo -->
+                    <StackPane styleClass="promo">
+                        <VBox spacing="10" alignment="CENTER">
+                            <Label text="Free Delivery on First Orders" styleClass="promo-title" />
+                            <Label text="Use code WELCOME50 at checkout on orders over $30." styleClass="promo-subtitle" />
+                            <Button text="Start Your Order" styleClass="promo-button" onAction="#goToMenu" />
+                        </VBox>
+                    </StackPane>
+
+                    <!-- Testimonials -->
+                    <VBox spacing="10">
+                        <Label text="TESTIMONIALS" styleClass="kicker" />
+                        <Label text="What our guests say" styleClass="section-title" />
+
+                        <HBox spacing="14">
+                            <VBox spacing="8" styleClass="testimonial" prefWidth="240">
+                                <Label text="★★★★★" styleClass="stars" />
+                                <Label text="&quot;The Spicy Basil Chicken is absolutely incredible. Highly recommend!&quot;" wrapText="true" />
+                                <Label text="— Sarah Jenkins" styleClass="muted" />
+                            </VBox>
+
+                            <VBox spacing="8" styleClass="testimonial" prefWidth="240">
+                                <Label text="★★★★★" styleClass="stars" />
+                                <Label text="&quot;A hidden gem! The atmosphere is cozy and the food is amazing.&quot;" wrapText="true" />
+                                <Label text="— Michael Chen" styleClass="muted" />
+                            </VBox>
+
+                            <VBox spacing="8" styleClass="testimonial" prefWidth="240">
+                                <Label text="★★★★★" styleClass="stars" />
+                                <Label text="&quot;Great service and even better food. Ordering was simple and smooth.&quot;" wrapText="true" />
+                                <Label text="— David Rossi" styleClass="muted" />
+                            </VBox>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Footer -->
+                    <VBox spacing="6" styleClass="footer">
+                        <Label text="Savoria" styleClass="brand" />
+                        <Label text="Bringing the finest culinary experiences to your table." styleClass="muted" />
+                        <Label text="© 2026 Savoria Restaurant" styleClass="muted" />
+                    </VBox>
+
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

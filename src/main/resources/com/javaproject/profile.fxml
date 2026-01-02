@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.ProfileController" styleClass="page">
+
+    <!-- Top bar -->
+    <top>
+        <BorderPane styleClass="topbar">
+            <padding>
+                <Insets top="12" right="18" bottom="12" left="18" />
+            </padding>
+
+            <left>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="◆" styleClass="brand-mark" />
+                    <Label text="Gourmet Haven" styleClass="brand" />
+                    <Region prefWidth="20" />
+                    <Button text="Home" styleClass="nav-link" onAction="#goMenu" />
+                    <Button text="Menu" styleClass="nav-link" onAction="#goMenu" />
+                    <Button text="About" styleClass="nav-link" onAction="#goAbout" />
+                    <Button text="Contact" styleClass="nav-link" onAction="#goContact" />
+                    <Button text="Location" styleClass="nav-link" onAction="#goLocation" />
+                </HBox>
+            </left>
+
+            <right>
+                <HBox spacing="14" alignment="CENTER_RIGHT">
+                    <Button text="🛒" styleClass="icon-button" onAction="#goCheckout" />
+                    <Button text="👤" styleClass="icon-button" />
+                </HBox>
+            </right>
+        </BorderPane>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+            <content>
+                <HBox spacing="18">
+                    <padding>
+                        <Insets top="18" right="18" bottom="18" left="18" />
+                    </padding>
+
+                    <!-- Sidebar -->
+                    <VBox spacing="14" prefWidth="240" styleClass="card">
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <StackPane>
+                                <Rectangle width="52" height="52" arcWidth="26" arcHeight="26" styleClass="avatar" />
+                            </StackPane>
+                            <VBox spacing="2">
+                                <Label fx:id="profileNameLabel" text="Guest" styleClass="card-title" />
+                                <Label fx:id="profileEmailLabel" text="Not signed in" styleClass="muted" />
+                            </VBox>
+                        </HBox>
+
+                        <Button fx:id="editProfileButton" text="Edit Profile" styleClass="icon-button" onAction="#toggleEditProfile" />
+
+                        <!-- Auth actions -->
+                        <HBox fx:id="signedOutActions" spacing="10">
+                            <Button text="Sign In" styleClass="secondary-button" onAction="#goLogin" />
+                            <Button text="Create Account" styleClass="primary-button" onAction="#goRegister" />
+                        </HBox>
+                        <Button fx:id="logoutButton" text="Sign Out" styleClass="secondary-button" onAction="#logout" visible="false" managed="false" />
+
+                        <VBox spacing="8" styleClass="side-nav">
+                            <Button fx:id="btnOverview" text="Overview" styleClass="side-item, side-active" onAction="#showOverview" />
+                            <Button fx:id="btnOrders" text="Orders" styleClass="side-item" onAction="#showOrders" />
+                            <Button fx:id="btnAddresses" text="Addresses" styleClass="side-item" onAction="#showAddresses" />
+                            <Button fx:id="btnPayment" text="Payment Methods" styleClass="side-item" onAction="#showPayment" />
+                            <Button fx:id="btnFavorites" text="Favorites" styleClass="side-item" onAction="#showFavorites" />
+                            <Button fx:id="adminPanelButton" text="Admin Panel" styleClass="side-item" onAction="#goAdmin" style="-fx-text-fill: #f05a28;" />
+                        </VBox>
+
+                        <VBox spacing="10" styleClass="help-card">
+                            <Label text="Need Help?" styleClass="card-title" />
+                            <Label text="Have an issue with an order? Our support team is here 24/7." styleClass="muted" wrapText="true" />
+                            <Button text="Contact Support" styleClass="cta" onAction="#goContact" />
+                        </VBox>
+                    </VBox>
+
+                    <!-- Main content -->
+                    <StackPane HBox.hgrow="ALWAYS">
+                        <!-- Overview View -->
+                        <VBox fx:id="viewOverview" spacing="16">
+                            <HBox>
+                                <VBox spacing="2">
+                                    <Label fx:id="greetingLabel" text="Hello!" styleClass="section-title" />
+                                    <Label text="Welcome back to your dashboard." styleClass="muted" />
+                                </VBox>
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label text="Gold Member" styleClass="chip chip-selected" />
+                            </HBox>
+
+                            <VBox fx:id="signedOutCard" spacing="10" styleClass="card">
+                                <Label text="Sign in to manage your profile" styleClass="card-title" />
+                                <Label text="You need an account to edit personal info, view orders, and access admin features (if eligible)." styleClass="muted" wrapText="true" />
+                                <HBox spacing="10">
+                                    <Button text="Sign In" styleClass="secondary-button" onAction="#goLogin" />
+                                    <Button text="Create Account" styleClass="primary-button" onAction="#goRegister" />
+                                </HBox>
+                            </VBox>
+
+                            <VBox fx:id="personalInfoCard" spacing="10" styleClass="card" visible="false" managed="false">
+                                <Label text="Personal Information" styleClass="card-title" />
+
+                                <HBox spacing="10">
+                                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                        <Label text="First Name" styleClass="muted" />
+                                        <TextField fx:id="firstNameField" editable="false" styleClass="search" />
+                                    </VBox>
+                                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                        <Label text="Last Name" styleClass="muted" />
+                                        <TextField fx:id="lastNameField" editable="false" styleClass="search" />
+                                    </VBox>
+                                </HBox>
+
+                                <HBox spacing="10">
+                                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                        <Label text="Email Address" styleClass="muted" />
+                                        <TextField fx:id="emailField" editable="false" styleClass="search" />
+                                    </VBox>
+                                    <VBox spacing="6" HBox.hgrow="ALWAYS">
+                                        <Label text="Phone Number" styleClass="muted" />
+                                        <TextField fx:id="phoneField" editable="false" styleClass="search" />
+                                    </VBox>
+                                </HBox>
+                            </VBox>
+
+                            <HBox spacing="12">
+                                <VBox spacing="6" prefWidth="220" styleClass="card">
+                                    <Label text="Loyalty Points" styleClass="muted" />
+                                    <Label text="1,250" styleClass="card-title" />
+                                    <Label text="+150 pts last order" styleClass="kicker" />
+                                </VBox>
+                                <VBox spacing="6" prefWidth="220" styleClass="card">
+                                    <Label text="Wallet Balance" styleClass="muted" />
+                                    <Label text="\$45.00" styleClass="card-title" />
+                                    <Button text="Top Up" styleClass="link-button" />
+                                </VBox>
+                                <VBox spacing="6" prefWidth="220" styleClass="card">
+                                    <Label text="Active Orders" styleClass="muted" />
+                                    <Label text="1" styleClass="card-title" />
+                                    <Label text="Arriving in 12m" styleClass="kicker" />
+                                </VBox>
+                            </HBox>
+
+                            <Label text="Recent Orders" styleClass="section-title" />
+                            <VBox fx:id="recentOrdersBox" spacing="10" />
+
+                            <VBox spacing="10">
+                                <Label text="Recommended Based on Your History" styleClass="card-title" />
+                                <HBox spacing="12">
+                                    <VBox spacing="8" prefWidth="220" styleClass="card">
+                                        <Rectangle width="190" height="90" arcWidth="14" arcHeight="14" styleClass="card-image" />
+                                        <Label text="Salmon Poke Bowl" styleClass="card-title" />
+                                        <Label text="\$16.50" styleClass="menu-card-price" />
+                                    </VBox>
+                                    <VBox spacing="8" prefWidth="220" styleClass="card">
+                                        <Rectangle width="190" height="90" arcWidth="14" arcHeight="14" styleClass="card-image" />
+                                        <Label text="BBQ Wings (6pcs)" styleClass="card-title" />
+                                        <Label text="\$9.99" styleClass="menu-card-price" />
+                                    </VBox>
+                                </HBox>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Orders View -->
+                        <VBox fx:id="viewOrders" spacing="16" visible="false" managed="false">
+                            <Label text="Order History" styleClass="section-title" />
+                            <Label text="View all your past orders here." styleClass="muted" />
+                            <!-- Placeholder for full order list -->
+                            <Label text="No additional orders found." styleClass="muted" />
+                        </VBox>
+
+                        <!-- Addresses View -->
+                        <VBox fx:id="viewAddresses" spacing="16" visible="false" managed="false">
+                            <Label text="Saved Addresses" styleClass="section-title" />
+                            <VBox spacing="10" styleClass="card">
+                                <Label text="Home" styleClass="card-title" />
+                                <TextField fx:id="addrHome" text="123 Main St, Apt 4B" editable="false" styleClass="search" />
+                                <Label text="Work" styleClass="card-title" />
+                                <TextField fx:id="addrWork" text="456 Corporate Blvd, Suite 200" editable="false" styleClass="search" />
+                            </VBox>
+                        </VBox>
+
+                        <!-- Payment View -->
+                        <VBox fx:id="viewPayment" spacing="16" visible="false" managed="false">
+                            <Label text="Payment Methods" styleClass="section-title" />
+                            <Label text="Manage your saved payment options." styleClass="muted" />
+                            <Label text="Telebirr Account: 0911****89" styleClass="card-title" />
+                        </VBox>
+
+                        <!-- Favorites View -->
+                        <VBox fx:id="viewFavorites" spacing="16" visible="false" managed="false">
+                            <Label text="Your Favorites" styleClass="section-title" />
+                            <Label text="Quickly reorder your favorite meals." styleClass="muted" />
+                            <Label text="No favorites saved yet." styleClass="muted" />
+                        </VBox>
+                    </StackPane>
+                </HBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

@@ -3,46 +3,136 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.shape.Rectangle?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.PrimaryController">
-   <padding>
-      <Insets top="12" right="12" bottom="12" left="12" />
-   </padding>
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.PrimaryController" styleClass="page">
 
+   <!-- Top Bar -->
    <top>
-      <HBox spacing="10">
-         <Label text="Restaurant App" />
-         <Label fx:id="totalLabel" text="Total: $0.00" />
-      </HBox>
+      <BorderPane styleClass="topbar">
+         <padding>
+            <Insets top="12" right="18" bottom="12" left="18" />
+         </padding>
+
+         <left>
+            <HBox spacing="10" alignment="CENTER_LEFT">
+               <Label text="◆" styleClass="brand-mark" />
+               <Label text="Gourmet Haven" styleClass="brand" />
+               <Region prefWidth="20" />
+               <Button text="Home" styleClass="nav-link, nav-active" />
+               <Button text="Menu" styleClass="nav-link" onAction="#scrollToSpecials" />
+               <Button text="About" styleClass="nav-link" onAction="#goToAbout" />
+               <Button text="Contact" styleClass="nav-link" onAction="#goToContact" />
+               <Button text="Location" styleClass="nav-link" onAction="#goToLocation" />
+            </HBox>
+         </left>
+
+         <center>
+            <TextField fx:id="searchField" promptText="Search dishes..." styleClass="search" />
+         </center>
+
+         <right>
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+               <StackPane>
+                  <Button fx:id="cartButton" text="🛒" onAction="#goToCheckout" styleClass="icon-button" />
+                  <Label fx:id="cartCountLabel" text="0" styleClass="cart-count" StackPane.alignment="TOP_RIGHT">
+                     <StackPane.margin>
+                        <Insets top="-6" right="-6" bottom="0" left="0" />
+                     </StackPane.margin>
+                  </Label>
+               </StackPane>
+               <Button text="👤" styleClass="icon-button" onAction="#goToProfile" />
+            </HBox>
+         </right>
+      </BorderPane>
    </top>
 
-   <left>
-      <VBox spacing="8" prefWidth="200">
-         <Label text="Menu" />
-         <ListView fx:id="menuListView" />
-      </VBox>
-   </left>
-
+   <!-- Page Content -->
    <center>
-      <VBox spacing="8">
-         <Label text="Item Details" />
-         <Label fx:id="itemNameLabel" text="Select an item" />
-         <Label fx:id="itemDescriptionLabel" wrapText="true" />
-         <Label fx:id="itemPriceLabel" />
-         <Button fx:id="addToCartButton" mnemonicParsing="false" onAction="#addSelectedItemToCart" text="Add to Cart" />
-      </VBox>
+      <ScrollPane fx:id="menuScroll" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+         <content>
+            <VBox spacing="18">
+               <padding>
+                  <Insets top="14" right="18" bottom="18" left="18" />
+               </padding>
+
+               <!-- Hero Banner (image placeholder) -->
+               <StackPane styleClass="menu-hero">
+                  <Rectangle height="210" arcWidth="18" arcHeight="18" width="860" styleClass="hero-rect" />
+                  <VBox spacing="8" styleClass="hero-overlay">
+                     <Label text="Taste the Passion" styleClass="menu-hero-title" />
+                     <Label text="Experience fresh ingredients and culinary excellence delivered straight to your table." styleClass="menu-hero-subtitle" />
+                     <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button text="View Full Menu" onAction="#scrollToSpecials" styleClass="primary-button" />
+                        <Button text="Book a Table" onAction="#goToReservation" styleClass="secondary-button" />
+                     </HBox>
+                  </VBox>
+               </StackPane>
+
+               <!-- Category Tabs -->
+               <HBox spacing="18" styleClass="tabs">
+                  <Button fx:id="tabPopular" text="Popular" onAction="#selectPopular" styleClass="tabtext tab-active" />
+                  <Button fx:id="tabStarters" text="Starters" onAction="#selectStarters" styleClass="tabtext" />
+                  <Button fx:id="tabMains" text="Mains" onAction="#selectMains" styleClass="tabtext" />
+                  <Button fx:id="tabDesserts" text="Desserts" onAction="#selectDesserts" styleClass="tabtext" />
+                  <Button fx:id="tabDrinks" text="Drinks" onAction="#selectDrinks" styleClass="tabtext" />
+               </HBox>
+
+               <!-- Filter chips -->
+               <HBox spacing="10" styleClass="chips">
+                  <ToggleButton fx:id="chipAll" text="All Filters" onAction="#applyFilters" styleClass="chip chip-selected">
+                     <graphic>
+                        <Label text="≡" styleClass="chip-icon" />
+                     </graphic>
+                  </ToggleButton>
+                  <ToggleButton fx:id="chipVegetarian" text="Vegetarian" onAction="#applyFilters" styleClass="chip" />
+                  <ToggleButton fx:id="chipVegan" text="Vegan" onAction="#applyFilters" styleClass="chip" />
+                  <ToggleButton fx:id="chipGlutenFree" text="Gluten-Free" onAction="#applyFilters" styleClass="chip" />
+                  <ToggleButton fx:id="chipSpicy" text="Spicy" onAction="#applyFilters" styleClass="chip" />
+               </HBox>
+
+               <!-- Chef's Specials -->
+               <BorderPane>
+                  <left>
+                     <Label text="Chef's Specials" styleClass="section-title" />
+                  </left>
+                  <right>
+                     <Button text="View All" styleClass="link-button" onAction="#showAll" />
+                  </right>
+               </BorderPane>
+               <FlowPane fx:id="specialsPane" hgap="14" vgap="14" prefWrapLength="860" />
+
+               <!-- Main Courses -->
+               <Label text="Main Courses" styleClass="section-title" />
+               <FlowPane fx:id="mainsPane" hgap="14" vgap="14" prefWrapLength="860" />
+
+               <!-- Footer -->
+               <BorderPane styleClass="menu-footer">
+                  <padding>
+                     <Insets top="18" right="0" bottom="0" left="0" />
+                  </padding>
+                  <left>
+                     <Label text="Gourmet Haven" styleClass="brand" />
+                  </left>
+                  <center>
+                     <Label text="Allergens     Contact     Terms of Service" styleClass="muted" />
+                  </center>
+                  <right>
+                     <Label text="© 2026" styleClass="muted" />
+                  </right>
+               </BorderPane>
+            </VBox>
+         </content>
+      </ScrollPane>
    </center>
 
-   <right>
-      <VBox spacing="8" prefWidth="240">
-         <Label text="Cart" />
-         <ListView fx:id="cartListView" />
-         <Button fx:id="removeOneButton" mnemonicParsing="false" onAction="#removeSelectedCartLine" text="Remove One" />
-         <Button fx:id="checkoutButton" mnemonicParsing="false" onAction="#switchToSecondary" text="Checkout" />
-      </VBox>
-   </right>
 </BorderPane>

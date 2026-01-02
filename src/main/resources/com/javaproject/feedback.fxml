@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.FeedbackController" styleClass="page">
+
+    <top>
+        <BorderPane styleClass="topbar">
+            <padding>
+                <Insets top="12" right="18" bottom="12" left="18" />
+            </padding>
+            <left>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="❤" styleClass="brand-mark" />
+                    <Label text="Tasty Bites" styleClass="brand" />
+                </HBox>
+            </left>
+            <right>
+                <HBox spacing="14" alignment="CENTER_RIGHT">
+                    <Button text="Home" styleClass="nav-link" onAction="#goBackToOrders" />
+                    <Button text="Orders" styleClass="nav-link" onAction="#goBackToOrders" />
+                    <Button text="Feedback" styleClass="nav-link" />
+                    <Button text="🙂" styleClass="icon-button" />
+                </HBox>
+            </right>
+        </BorderPane>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED">
+            <content>
+                <HBox spacing="18">
+                    <padding>
+                        <Insets top="18" right="18" bottom="18" left="18" />
+                    </padding>
+
+                    <!-- Left image panel -->
+                    <StackPane prefWidth="360" styleClass="feedback-left">
+                        <Rectangle width="360" height="520" arcWidth="18" arcHeight="18" styleClass="feedback-image" />
+                        <VBox spacing="10" StackPane.alignment="TOP_LEFT">
+                            <Button text="← Back to Orders" onAction="#goBackToOrders" styleClass="link-button" />
+                        </VBox>
+                        <VBox spacing="6" StackPane.alignment="BOTTOM_LEFT" styleClass="feedback-left-copy">
+                            <Label text="Did you enjoy your meal?" styleClass="card-title" />
+                            <Label text="Your feedback helps us serve you better. It only takes a minute to share your thoughts!" styleClass="muted" wrapText="true" />
+                        </VBox>
+                        <StackPane.margin>
+                            <Insets top="16" right="16" bottom="16" left="16" />
+                        </StackPane.margin>
+                    </StackPane>
+
+                    <!-- Right form panel -->
+                    <VBox spacing="14" styleClass="card" HBox.hgrow="ALWAYS">
+                        <Label text="Rate your experience" styleClass="section-title" />
+                        <Label text="Tell us about your recent order from Tasty Bites." styleClass="muted" />
+
+                        <HBox spacing="10" styleClass="card">
+                            <Rectangle width="36" height="36" arcWidth="18" arcHeight="18" styleClass="avatar" />
+                            <VBox spacing="2">
+                                <Label text="Order #1234 • Oct 24, 2023" styleClass="card-title" />
+                                <Label text="Spicy Ramen, Gyoza, Green Tea" styleClass="muted" />
+                            </VBox>
+                        </HBox>
+
+                        <Label text="OVERALL RATING" styleClass="kicker" />
+                        <HBox spacing="10">
+                            <Label text="☆" styleClass="star" />
+                            <Label text="☆" styleClass="star" />
+                            <Label text="☆" styleClass="star" />
+                            <Label text="☆" styleClass="star" />
+                            <Label text="☆" styleClass="star" />
+                        </HBox>
+
+                        <Label text="WHAT MADE IT GREAT?" styleClass="kicker" />
+                        <HBox spacing="10">
+                            <Label text="Taste" styleClass="chip chip-selected" />
+                            <Label text="Delivery Speed" styleClass="chip" />
+                            <Label text="Packaging" styleClass="chip" />
+                            <Label text="Portion Size" styleClass="chip" />
+                            <Label text="Temperature" styleClass="chip" />
+                        </HBox>
+
+                        <Label text="SHARE YOUR THOUGHTS" styleClass="kicker" />
+                        <TextArea promptText="The broth was incredible, but the noodles were a bit..." prefRowCount="4" wrapText="true" />
+
+                        <Label text="ADD PHOTOS" styleClass="kicker" />
+                        <StackPane styleClass="upload">
+                            <Rectangle width="520" height="120" arcWidth="14" arcHeight="14" styleClass="upload-rect" />
+                            <VBox spacing="6" alignment="CENTER">
+                                <Label text="Click or drag to upload photos" styleClass="muted" />
+                                <Label text="Up to 3 images, max 5MB each" styleClass="muted" />
+                            </VBox>
+                        </StackPane>
+
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <Button text="Skip Feedback" styleClass="link-button" onAction="#goBackToOrders" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Button text="Submit Review" styleClass="cta" onAction="#submitReview" />
+                        </HBox>
+                    </VBox>
+                </HBox>
+            </content>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

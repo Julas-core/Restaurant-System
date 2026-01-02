@@ -25,8 +25,7 @@ public class SecondaryController {
         orderSummaryListView.setItems(App.getState().getCartLines());
         updateTotal();
 
-        boolean cartEmpty = App.getState().getCartLines().isEmpty();
-        placeOrderButton.setDisable(cartEmpty);
+        placeOrderButton.setDisable(App.getState().getCartLines().isEmpty());
 
         App.getState().getCartLines().addListener((javafx.collections.ListChangeListener<CartLine>) change -> {
             updateTotal();
