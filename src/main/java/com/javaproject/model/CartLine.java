@@ -30,6 +30,6 @@ public class CartLine {
 
     @Override
     public String toString() {
-        return String.format("%s x%d ($%.2f)", item.getName(), quantity, getLineTotal());
+        return String.format("%s x%d (ETB %.2f)", item.getName(), quantity, getLineTotal());
     }
 }

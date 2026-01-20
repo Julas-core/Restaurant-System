@@ -26,7 +26,7 @@
          <left>
             <HBox spacing="10" alignment="CENTER_LEFT">
                <Label text="◆" styleClass="brand-mark" />
-               <Label text="Gourmet Haven" styleClass="brand" />
+               <Label text="Ethiopia" styleClass="brand" />
                <Region prefWidth="20" />
                <Button text="Home" styleClass="nav-link, nav-active" />
                <Button text="Menu" styleClass="nav-link" onAction="#scrollToSpecials" />
@@ -67,10 +67,10 @@
 
                <!-- Hero Banner (image placeholder) -->
                <StackPane styleClass="menu-hero">
-                  <Rectangle height="210" arcWidth="18" arcHeight="18" width="860" styleClass="hero-rect" />
+                  <Region prefHeight="210" styleClass="hero-rect" />
                   <VBox spacing="8" styleClass="hero-overlay">
                      <Label text="Taste the Passion" styleClass="menu-hero-title" />
-                     <Label text="Experience fresh ingredients and culinary excellence delivered straight to your table." styleClass="menu-hero-subtitle" />
+                     <Label text="Experienc3e fresh ingredients and culinary excellence delivered straight to your table." styleClass="menu-hero-subtitle" />
                      <HBox spacing="10" alignment="CENTER_LEFT">
                         <Button text="View Full Menu" onAction="#scrollToSpecials" styleClass="primary-button" />
                         <Button text="Book a Table" onAction="#goToReservation" styleClass="secondary-button" />
@@ -79,7 +79,7 @@
                </StackPane>
 
                <!-- Category Tabs -->
-               <HBox spacing="18" styleClass="tabs">
+               <HBox spacing="18" styleClass="tabs" alignment="CENTER_LEFT">
                   <Button fx:id="tabPopular" text="Popular" onAction="#selectPopular" styleClass="tabtext tab-active" />
                   <Button fx:id="tabStarters" text="Starters" onAction="#selectStarters" styleClass="tabtext" />
                   <Button fx:id="tabMains" text="Mains" onAction="#selectMains" styleClass="tabtext" />
@@ -109,27 +109,12 @@
                      <Button text="View All" styleClass="link-button" onAction="#showAll" />
                   </right>
                </BorderPane>
-               <FlowPane fx:id="specialsPane" hgap="14" vgap="14" prefWrapLength="860" />
+               <FlowPane fx:id="specialsPane" hgap="14" vgap="14" alignment="TOP_LEFT" />
 
                <!-- Main Courses -->
                <Label text="Main Courses" styleClass="section-title" />
-               <FlowPane fx:id="mainsPane" hgap="14" vgap="14" prefWrapLength="860" />
+               <FlowPane fx:id="mainsPane" hgap="14" vgap="14" alignment="TOP_LEFT" />
 
-               <!-- Footer -->
-               <BorderPane styleClass="menu-footer">
-                  <padding>
-                     <Insets top="18" right="0" bottom="0" left="0" />
-                  </padding>
-                  <left>
-                     <Label text="Gourmet Haven" styleClass="brand" />
-                  </left>
-                  <center>
-                     <Label text="Allergens     Contact     Terms of Service" styleClass="muted" />
-                  </center>
-                  <right>
-                     <Label text="© 2026" styleClass="muted" />
-                  </right>
-               </BorderPane>
             </VBox>
          </content>
       </ScrollPane>

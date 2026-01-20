@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
@@ -18,7 +19,7 @@
             </padding>
 
             <left>
-                <Label text="Savoria" styleClass="brand" />
+                <Label text="Ethiopia" styleClass="brand" />
             </left>
 
             <right>
@@ -41,19 +42,19 @@
                     </padding>
 
                     <!-- Hero -->
-                    <HBox spacing="24" styleClass="hero">
-                        <VBox spacing="14" prefWidth="420" styleClass="hero-left">
+                    <HBox spacing="24" styleClass="hero" alignment="CENTER">
+                        <VBox spacing="14" HBox.hgrow="ALWAYS" styleClass="hero-left">
                             <Label text="Taste the\nPassion in\nEvery Bite." styleClass="hero-title" />
                             <Label text="Fresh ingredients, authentic recipes, delivered to your door.\nExperience fine dining from the comfort of your home." styleClass="hero-subtitle" />
                             <HBox spacing="12">
                                 <Button text="View Full Menu" styleClass="primary-button" onAction="#goToMenu" />
                                 <Button text="Book a Table" styleClass="secondary-button" />
-                            </HBox>
+                            </HBox>     
                             <Label text="★ ★ ★ ★ ★   1,200+ Happy Customers" styleClass="rating" />
                         </VBox>
 
                         <!-- Image placeholder (no external assets) -->
-                        <StackPane styleClass="hero-image" prefWidth="420">
+                        <StackPane styleClass="hero-image" HBox.hgrow="ALWAYS">
                             <Rectangle width="360" height="220" arcWidth="18" arcHeight="18" styleClass="image-placeholder" />
                             <Label text="Food Image" styleClass="image-caption" />
                         </StackPane>
@@ -66,37 +67,11 @@
                                 <Label text="OUR MENU" styleClass="kicker" />
                                 <Label text="Customer Favorites" styleClass="section-title" />
                             </VBox>
+                            <Region HBox.hgrow="ALWAYS" />
                             <Button text="See All Menu →" styleClass="link-button" onAction="#goToMenu" />
                         </HBox>
 
-                        <HBox spacing="14" styleClass="cards">
-                            <VBox spacing="8" styleClass="card">
-                                <Rectangle width="170" height="110" arcWidth="14" arcHeight="14" styleClass="card-image" />
-                                <Label text="Spicy Basil Chicken" styleClass="card-title" />
-                                <Label text="Price: $18.50" styleClass="card-price" />
-                                <Button text="Add to Order" styleClass="card-button" onAction="#addFavorite" userData="Spicy Basil Chicken" />
-                            </VBox>
-
-                            <VBox spacing="8" styleClass="card">
-                                <Rectangle width="170" height="110" arcWidth="14" arcHeight="14" styleClass="card-image" />
-                                <Label text="Truffle Burger" styleClass="card-title" />
-                                <Label text="Price: $16.00" styleClass="card-price" />
-                                <Button text="Add to Order" styleClass="card-button" onAction="#addFavorite" userData="Truffle Burger" />
-                            </VBox>
-
-                            <VBox spacing="8" styleClass="card">
-                                <Rectangle width="170" height="110" arcWidth="14" arcHeight="14" styleClass="card-image" />
-                                <Label text="Seared Salmon" styleClass="card-title" />
-                                <Label text="Price: $24.00" styleClass="card-price" />
-                                <Button text="Add to Order" styleClass="card-button" onAction="#addFavorite" userData="Seared Salmon" />
-                            </VBox>
-
-                            <VBox spacing="8" styleClass="card">
-                                <Rectangle width="170" height="110" arcWidth="14" arcHeight="14" styleClass="card-image" />
-                                <Label text="Garden Pizza" styleClass="card-title" />
-                                <Label text="Price: $15.50" styleClass="card-price" />
-                                <Button text="Add to Order" styleClass="card-button" onAction="#addFavorite" userData="Garden Pizza" />
-                            </VBox>
+                        <HBox fx:id="favoritesContainer" spacing="14" styleClass="cards" alignment="CENTER">
                         </HBox>
                     </VBox>
 
@@ -104,20 +79,19 @@
                     <StackPane styleClass="promo">
                         <VBox spacing="10" alignment="CENTER">
                             <Label text="Free Delivery on First Orders" styleClass="promo-title" />
-                            <Label text="Use code WELCOME50 at checkout on orders over $30." styleClass="promo-subtitle" />
+                            <Label text="Use code ETHIOPIA10 at checkout on orders over ETB 300." styleClass="promo-subtitle" />
                             <Button text="Start Your Order" styleClass="promo-button" onAction="#goToMenu" />
                         </VBox>
                     </StackPane>
 
                     <!-- Testimonials -->
-                    <VBox spacing="10">
+                    <VBox spacing="10" alignment="CENTER">
                         <Label text="TESTIMONIALS" styleClass="kicker" />
                         <Label text="What our guests say" styleClass="section-title" />
-
                         <HBox spacing="14">
                             <VBox spacing="8" styleClass="testimonial" prefWidth="240">
                                 <Label text="★★★★★" styleClass="stars" />
-                                <Label text="&quot;The Spicy Basil Chicken is absolutely incredible. Highly recommend!&quot;" wrapText="true" />
+                                <Label text="&quot;The Doro Wat is absolutely incredible. Highly recommend!&quot;" wrapText="true" />
                                 <Label text="— Sarah Jenkins" styleClass="muted" />
                             </VBox>
 
@@ -136,12 +110,8 @@
                     </VBox>
 
                     <!-- Footer -->
-                    <VBox spacing="6" styleClass="footer">
-                        <Label text="Savoria" styleClass="brand" />
-                        <Label text="Bringing the finest culinary experiences to your table." styleClass="muted" />
-                        <Label text="© 2026 Savoria Restaurant" styleClass="muted" />
-                    </VBox>
-
+                    <!-- Removed as per request -->
+                    
                 </VBox>
             </content>
         </ScrollPane>

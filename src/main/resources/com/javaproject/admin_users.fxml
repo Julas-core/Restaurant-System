@@ -15,6 +15,32 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.AdminUsersController" styleClass="page">
 
+    <top>
+        <BorderPane styleClass="topbar">
+            <padding>
+                <Insets top="12" right="18" bottom="12" left="18" />
+            </padding>
+            <left>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="◆" styleClass="brand-mark" />
+                    <Label text="Ethiopia" styleClass="brand" />
+                    <Region prefWidth="20" />
+                    <Button text="Home" styleClass="nav-link" onAction="#goToHome" />
+                    <Button text="Menu" styleClass="nav-link" onAction="#goToMenu" />
+                    <Button text="About" styleClass="nav-link" onAction="#goToAbout" />
+                    <Button text="Contact" styleClass="nav-link" onAction="#goToContact" />
+                    <Button text="Location" styleClass="nav-link" onAction="#goToLocation" />
+                </HBox>
+            </left>
+            <right>
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="🛒" styleClass="icon-button" onAction="#goToCheckout" />
+                    <Button text="👤" styleClass="icon-button" onAction="#goToProfile" />
+                </HBox>
+            </right>
+        </BorderPane>
+    </top>
+
     <!-- Sidebar -->
     <left>
         <VBox spacing="5" prefWidth="250" styleClass="sidebar">
@@ -66,7 +92,7 @@
                     <HBox spacing="20">
                         <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
                             <Label text="Total Users" styleClass="stat-label" />
-                            <Label text="1,240" styleClass="stat-value" />
+                            <Label fx:id="totalUsersLabel" text="0" styleClass="stat-value" />
                             <Label text="↗ +5%">
                                 <styleClass>
                                     <String fx:value="badge" />

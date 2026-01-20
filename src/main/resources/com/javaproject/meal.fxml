@@ -76,7 +76,7 @@
                         <!-- Left: image + thumbnails -->
                         <VBox spacing="12" prefWidth="520">
                             <StackPane styleClass="detail-image">
-                                <Rectangle width="520" height="320" arcWidth="16" arcHeight="16" styleClass="detail-image-rect" />
+                                <StackPane fx:id="mealImageContainer" prefWidth="520" prefHeight="320" maxWidth="520" maxHeight="320" />
                                 <HBox spacing="8" StackPane.alignment="TOP_LEFT">
                                     <Label text="BEST SELLER" styleClass="badge" />
                                     <Label text="SPICY" styleClass="badge badge-spicy" />
@@ -101,13 +101,17 @@
 
                         <!-- Right: details + customization -->
                         <VBox spacing="12" prefWidth="420" styleClass="detail-panel">
-                            <Label fx:id="titleLabel" text="Signature Spicy Chicken Burger" styleClass="detail-title" />
+                            <HBox spacing="10" alignment="CENTER_LEFT">
+                                <Label fx:id="titleLabel" text="Signature Spicy Chicken Burger" styleClass="detail-title" wrapText="true" HBox.hgrow="ALWAYS" />
+                                <Button fx:id="btnFavorite" text="♡" styleClass="icon-button" style="-fx-font-size: 20px;" onAction="#toggleFavorite" />
+                            </HBox>
 
                             <HBox spacing="10" alignment="CENTER_LEFT">
-                                <Label fx:id="priceLabel" text="\$14.50" styleClass="detail-price" />
+                                <Label fx:id="priceLabel" text="ETB 450.00" styleClass="detail-price" />
                                 <Label text="★" styleClass="rating-star" />
                                 <Label fx:id="ratingLabel" text="4.8" styleClass="detail-rating" />
                                 <Label fx:id="reviewsLabel" text="(124 reviews)" styleClass="muted" />
+                                <Button text="Write Review" styleClass="link-button" onAction="#goToReview" textFill="#0d6efd" />
                             </HBox>
 
                             <Label fx:id="descriptionLabel" text="Crispy fried chicken breast, spicy mayo, house-made pickles, lettuce, and melted cheddar on a toasted brioche bun." styleClass="muted" wrapText="true" />
@@ -128,26 +132,26 @@
                                 <HBox spacing="10" alignment="CENTER_LEFT" styleClass="option-row">
                                     <RadioButton fx:id="sizeLarge" text="Large" />
                                     <Region HBox.hgrow="ALWAYS" />
-                                    <Label text="+ \$2.00" styleClass="muted" />
+                                    <Label text="+ ETB 50.00" styleClass="muted" />
                                 </HBox>
                             </VBox>
 
-                            <Label text="Add Toppings" styleClass="detail-section" />
+                            <Label text="Add-ons &amp; Extras" styleClass="detail-section" />
                             <VBox spacing="10">
                                 <HBox spacing="10" alignment="CENTER_LEFT" styleClass="topping-row">
                                     <CheckBox fx:id="toppingCheese" text="Extra Cheese" />
                                     <Region HBox.hgrow="ALWAYS" />
-                                    <Label text="+ \$1.00" styleClass="muted" />
+                                    <Label text="+ ETB 20.00" styleClass="muted" />
                                 </HBox>
                                 <HBox spacing="10" alignment="CENTER_LEFT" styleClass="topping-row">
                                     <CheckBox fx:id="toppingBacon" text="Crispy Bacon" />
                                     <Region HBox.hgrow="ALWAYS" />
-                                    <Label text="+ \$1.50" styleClass="muted" />
+                                    <Label text="+ ETB 40.00" styleClass="muted" />
                                 </HBox>
                                 <HBox spacing="10" alignment="CENTER_LEFT" styleClass="topping-row">
                                     <CheckBox fx:id="toppingAvocado" text="Avocado Slices" />
                                     <Region HBox.hgrow="ALWAYS" />
-                                    <Label text="+ \$2.00" styleClass="muted" />
+                                    <Label text="+ ETB 50.00" styleClass="muted" />
                                 </HBox>
                             </VBox>
 
@@ -173,8 +177,8 @@
             <VBox spacing="2">
                 <Label text="TOTAL PRICE" styleClass="kicker" />
                 <HBox spacing="8" alignment="BASELINE_LEFT">
-                    <Label fx:id="bottomTotalPriceLabel" text="\$14.50" styleClass="detail-price" />
-                    <Label fx:id="bottomUnitPriceLabel" text="\$14.50" styleClass="muted" />
+                    <Label fx:id="bottomTotalPriceLabel" text="ETB 450.00" styleClass="detail-price" />
+                    <Label fx:id="bottomUnitPriceLabel" text="ETB 450.00" styleClass="muted" />
                 </HBox>
             </VBox>
 

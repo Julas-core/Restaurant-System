@@ -29,15 +29,15 @@ public class AppState {
     public AppState() {
         this.menuItems = List.of(
                 // Chef's Specials (top row)
-                new MenuItem("Buddha Bowl", "Quinoa, roasted chickpeas, avocado, kale, and tahini dressing.", 14.50, "Starters", "Popular", 4.9, true),
-                new MenuItem("Inferno Burger", "Double beef patty, jalapeños, pepper jack cheese, and spicy aioli.", 16.00, "Mains", "Spicy", 4.7, true),
-                new MenuItem("Green Goddess", "Mixed greens, cucumber, edamame, avocado, and green goddess dressing.", 13.50, "Starters", "Vegan", 4.8, true),
-                new MenuItem("Tropical Mojito", "Rum, fresh mint, lime juice, soda water, and passion fruit syrup.", 10.00, "Drinks", "Vegan", 5.0, true),
+                new MenuItem("Doro Wat", "Spicy chicken stew with hard-boiled eggs, served with injera.", 850.00, "Mains", "Special", 4.9, true, "images/Doro_Wot_1768745545495.jpg"),
+                new MenuItem("Kitfo", "Minced raw beef marinated in mitmita and niter kibbeh.", 900.00, "Mains", "Popular", 4.8, true, "images/Kitfo_1768808301122.jpg"),
+                new MenuItem("Vegan Platter", "Assortment of lentil and vegetable stews served on injera.", 600.00, "Mains", "Vegan", 4.9, true, "images/Beyaynetu_1768808217373.jpg"),
+                new MenuItem("Tej", "Traditional Ethiopian honey wine.", 300.00, "Drinks", "Special", 4.7, true, "images/Birzi_1768805797011.jpg"),
 
                 // Main Courses (second section)
-                new MenuItem("Ribeye Steak", "12oz grass-fed ribeye, garlic butter, served with roasted potatoes.", 32.00, "Mains", "Popular", 4.9, false),
-                new MenuItem("Grilled Salmon", "Fresh Atlantic salmon, lemon herb glaze, wild rice pilaf.", 26.50, "Mains", "Gluten-Free", 4.8, false),
-                new MenuItem("Mushroom Risotto", "Arborio rice, wild mushrooms, parmesan cheese, truffle oil.", 21.00, "Mains", "Vegetarian", 4.7, false)
+                new MenuItem("Tibs", "Sautéed beef strips with vegetables and rosemary.", 750.00, "Mains", "Popular", 4.8, false, "images/Shekla_Tibs_1768807889729.jpg"),
+                new MenuItem("Shiro Tegamino", "Chickpea flour stew served in a clay pot.", 450.00, "Mains", "Vegetarian", 4.6, false, "images/Shiro_Tegamino_1768807333084.jpg"),
+                new MenuItem("Ethiopian Coffee", "Freshly brewed traditional coffee.", 80.00, "Drinks", "Popular", 5.0, false, "images/Traditional_Coffee_1768805842468.jpg")
         );
         this.cartLines = FXCollections.observableArrayList();
     }
@@ -188,30 +188,30 @@ public class AppState {
     }
 
     public double getDeliveryFee() {
-        return delivery ? 3.99 : 0.00;
+        if (!delivery) return 0.0;
+        return new com.javaproject.db.ConfigDao().getDouble("DELIVERY_FEE", 50.0);
     }
 
     public double getTax() {
-        // Keep it beginner-friendly: flat 8% sales tax on subtotal.
-        return getSubtotal() * 0.08;
+        double rate = new com.javaproject.db.ConfigDao().getDouble("TAX_RATE", 15.0);
+        return getSubtotal() * (rate / 100.0);
     }
 
     public double getDiscountAmount() {
         if (promoCode == null) {
             return 0.0;
         }
+        // Discount 10% on "WELCOME10", else 0. 
+        // We will move this into DB validation in Checkout Controller, 
+        // but for app state calculation we need to know the percent.
+        // Let's store discountPercent in AppState instead of checking code string every time.
+        return getSubtotal() * (discountPercent / 100.0);
+    }
+    
+    private double discountPercent = 0.0;
 
-        String code = promoCode.trim().toUpperCase();
-        if (code.isBlank()) {
-            return 0.0;
-        }
-
-        // Screenshot-style promo: 10% off.
-        if (code.equals("STUDENT20")) {
-            return getSubtotal() * 0.10;
-        }
-
-        return 0.0;
+    public void setDiscountPercent(double percent) {
+        this.discountPercent = percent;
     }
 
     public double getTotal() {

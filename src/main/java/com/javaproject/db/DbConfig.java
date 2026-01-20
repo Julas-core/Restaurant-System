@@ -19,23 +19,20 @@ public final class DbConfig {
     }
 
     public static DbConfig fromEnv() {
-        String url = env("DB_URL");
-        String user = env("DB_USER");
-        String password = env("DB_PASSWORD");
+        // We will hardcode your settings here to make sure they are picked up.
+        String url = "jdbc:postgresql://localhost:5432/restaurantjava";
+        String user = "postgres";
+        String password = "admin123";
 
-        if (isBlank(url)) {
-            String host = defaultIfBlank(env("PGHOST"), "localhost");
-            String port = defaultIfBlank(env("PGPORT"), "5432");
-            String db = defaultIfBlank(env("PGDATABASE"), "resturantjava");
-            url = "jdbc:postgresql://" + host + ":" + port + "/" + db;
-        }
+        // This allows environment variables to override if needed, but defaults to your values above.
+        String envUrl = System.getenv("DB_URL");
+        if (envUrl != null && !envUrl.isBlank()) url = envUrl;
 
-        if (isBlank(user)) {
-            user = env("PGUSER");
-        }
-        if (password == null) {
-            password = System.getenv("PGPASSWORD");
-        }
+        String envUser = System.getenv("DB_USER");
+        if (envUser != null && !envUser.isBlank()) user = envUser;
+        
+        String envPass = System.getenv("DB_PASSWORD");
+        if (envPass != null && !envPass.isBlank()) password = envPass;
 
         return new DbConfig(url, user, password);
     }
@@ -50,18 +47,5 @@ public final class DbConfig {
 
     public String getPassword() {
         return password;
-    }
-
-    private static String env(String name) {
-        String v = System.getenv(name);
-        return v == null ? "" : v.trim();
-    }
-
-    private static String defaultIfBlank(String value, String fallback) {
-        return isBlank(value) ? fallback : value;
-    }
-
-    private static boolean isBlank(String s) {
-        return s == null || s.trim().isBlank();
     }
 }

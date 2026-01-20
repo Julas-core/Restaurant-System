@@ -49,7 +49,7 @@
                         <!-- Usage: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.javaproject.App</mainClass>
+                            <mainClass>com.javaproject/com.javaproject.App</mainClass>
                         </configuration>
                     </execution>
                 </executions>

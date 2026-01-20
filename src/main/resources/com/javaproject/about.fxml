@@ -19,7 +19,7 @@
             <left>
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="◆" styleClass="brand-mark" />
-                    <Label text="Gourmet Haven" styleClass="brand" />
+                    <Label text="Ethiopia" styleClass="brand" />
                     <Region prefWidth="20" />
                     <Button text="Home" styleClass="nav-link" onAction="#goToHome" />
                     <Button text="Menu" styleClass="nav-link" onAction="#goToMenu" />
@@ -45,7 +45,7 @@
                         <Insets top="40" right="40" bottom="40" left="40" />
                     </padding>
                     <Label text="About Us" styleClass="section-title" />
-                    <Label text="Welcome to Gourmet Haven, where passion meets plate. Established in 2020, we serve the finest culinary delights made from locally sourced ingredients." wrapText="true" maxWidth="600" styleClass="muted" />
+                    <Label text="Welcome to Ethiopia, where passion meets plate. Established in 2020, we serve the finest culinary delights made from locally sourced ingredients." wrapText="true" maxWidth="600" styleClass="muted" />
                     <Label text="Our Mission" styleClass="kicker" />
                     <Label text="To provide an unforgettable dining experience with every bite." wrapText="true" maxWidth="600" styleClass="muted" />
                 </VBox>

@@ -22,8 +22,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        stage.setTitle("Restaurant App");
-        scene = new Scene(loadFXML("home"), 1366, 768);
+        stage.setTitle("Ethiopia Restaurant");
+        scene = new Scene(loadFXML("login"), 1366, 768);
         scene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
@@ -35,8 +35,10 @@ public class App extends Application {
             if (dbMenu != null && !dbMenu.isEmpty()) {
                 getState().setMenuItems(dbMenu);
             }
-        } catch (Exception ignored) {
-            // Intentionally ignore to keep UI usable without DB.
+        } catch (Exception e) {
+            // CHANGE: Print the error so we can see what is wrong
+            System.err.println("Database connection failed!");
+            e.printStackTrace(); 
         }
     }
 

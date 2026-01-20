@@ -31,7 +31,7 @@
             <left>
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="◆" styleClass="brand-mark" />
-                    <Label text="Gourmet Haven" styleClass="brand" />
+                    <Label text="Ethiopia" styleClass="brand" />
                     <Region prefWidth="20" />
                     <Button text="Home" styleClass="nav-link" onAction="#goBack" />
                     <Button text="Menu" styleClass="nav-link" onAction="#goMenu" />
@@ -148,6 +148,15 @@
                                     <RadioButton fx:id="payCash" text="Cash" styleClass="pay-option" />
                                 </HBox>
 
+                                <VBox fx:id="telebirrContainer" spacing="8" visible="false" managed="false">
+                                    <Label text="Enter your Telebirr mobile number:" styleClass="muted" />
+                                    <HBox spacing="10" alignment="CENTER_LEFT">
+                                        <Label text="+251" style="-fx-font-weight: bold; -fx-text-fill: #555;" />
+                                        <TextField fx:id="telebirrMobileField" promptText="911234567" HBox.hgrow="ALWAYS" />
+                                    </HBox>
+                                    <Label text="Request Payment" styleClass="link-button" onMouseClicked="#requestTelebirrUSSD" />
+                                </VBox>
+
                                 <VBox fx:id="cashMessage" spacing="6" visible="false" managed="false">
                                     <Label text="You'll be asked to pay when this gets delivered." styleClass="muted" wrapText="true" />
                                 </VBox>
@@ -178,16 +187,16 @@
                                 </columnConstraints>
 
                                 <Label text="Subtotal" styleClass="muted" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                                <Label fx:id="subtotalLabel" text="\$0.00" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                                <Label fx:id="subtotalLabel" text="ETB 0.00" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 
                                 <Label text="Delivery Fee" styleClass="muted" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                                <Label fx:id="deliveryFeeLabel" text="\$0.00" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                                <Label fx:id="deliveryFeeLabel" text="ETB 0.00" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 
                                 <Label text="Tax" styleClass="muted" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-                                <Label fx:id="taxLabel" text="\$0.00" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+                                <Label fx:id="taxLabel" text="ETB 0.00" GridPane.rowIndex="2" GridPane.columnIndex="1" />
 
                                 <Label text="Discount (10%)" styleClass="kicker" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-                                <Label fx:id="discountLabel" text="\$0.00" styleClass="kicker" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                                <Label fx:id="discountLabel" text="ETB 0.00" styleClass="kicker" GridPane.rowIndex="3" GridPane.columnIndex="1" />
                             </GridPane>
 
                             <Separator />
@@ -195,7 +204,7 @@
                             <HBox alignment="CENTER_LEFT">
                                 <Label text="Total" styleClass="card-title" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label fx:id="totalLabel" text="\$0.00" styleClass="detail-price" />
+                                <Label fx:id="totalLabel" text="ETB 0.00" styleClass="detail-price" />
                             </HBox>
 
                             <Button fx:id="placeOrderButton" text="Place Order" styleClass="cta" onAction="#placeOrder" />

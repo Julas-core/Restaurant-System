@@ -25,7 +25,7 @@
             <left>
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="◆" styleClass="brand-mark" />
-                    <Label text="Gourmet Haven" styleClass="brand" />
+                    <Label text="Ethiopia" styleClass="brand" />
                     <Region prefWidth="20" />
                     <Button text="Home" styleClass="nav-link" onAction="#goMenu" />
                     <Button text="Menu" styleClass="nav-link" onAction="#goMenu" />
@@ -77,8 +77,8 @@
                             <Button fx:id="btnOverview" text="Overview" styleClass="side-item, side-active" onAction="#showOverview" />
                             <Button fx:id="btnOrders" text="Orders" styleClass="side-item" onAction="#showOrders" />
                             <Button fx:id="btnAddresses" text="Addresses" styleClass="side-item" onAction="#showAddresses" />
-                            <Button fx:id="btnPayment" text="Payment Methods" styleClass="side-item" onAction="#showPayment" />
                             <Button fx:id="btnFavorites" text="Favorites" styleClass="side-item" onAction="#showFavorites" />
+                            <Button fx:id="btnSettings" text="Settings" styleClass="side-item" onAction="#showSettings" />
                             <Button fx:id="adminPanelButton" text="Admin Panel" styleClass="side-item" onAction="#goAdmin" style="-fx-text-fill: #f05a28;" />
                         </VBox>
 
@@ -137,40 +137,12 @@
                                 </HBox>
                             </VBox>
 
-                            <HBox spacing="12">
-                                <VBox spacing="6" prefWidth="220" styleClass="card">
-                                    <Label text="Loyalty Points" styleClass="muted" />
-                                    <Label text="1,250" styleClass="card-title" />
-                                    <Label text="+150 pts last order" styleClass="kicker" />
-                                </VBox>
-                                <VBox spacing="6" prefWidth="220" styleClass="card">
-                                    <Label text="Wallet Balance" styleClass="muted" />
-                                    <Label text="\$45.00" styleClass="card-title" />
-                                    <Button text="Top Up" styleClass="link-button" />
-                                </VBox>
-                                <VBox spacing="6" prefWidth="220" styleClass="card">
-                                    <Label text="Active Orders" styleClass="muted" />
-                                    <Label text="1" styleClass="card-title" />
-                                    <Label text="Arriving in 12m" styleClass="kicker" />
-                                </VBox>
-                            </HBox>
-
                             <Label text="Recent Orders" styleClass="section-title" />
                             <VBox fx:id="recentOrdersBox" spacing="10" />
 
                             <VBox spacing="10">
                                 <Label text="Recommended Based on Your History" styleClass="card-title" />
-                                <HBox spacing="12">
-                                    <VBox spacing="8" prefWidth="220" styleClass="card">
-                                        <Rectangle width="190" height="90" arcWidth="14" arcHeight="14" styleClass="card-image" />
-                                        <Label text="Salmon Poke Bowl" styleClass="card-title" />
-                                        <Label text="\$16.50" styleClass="menu-card-price" />
-                                    </VBox>
-                                    <VBox spacing="8" prefWidth="220" styleClass="card">
-                                        <Rectangle width="190" height="90" arcWidth="14" arcHeight="14" styleClass="card-image" />
-                                        <Label text="BBQ Wings (6pcs)" styleClass="card-title" />
-                                        <Label text="\$9.99" styleClass="menu-card-price" />
-                                    </VBox>
+                                <HBox fx:id="recommendedBox" spacing="12">
                                 </HBox>
                             </VBox>
                         </VBox>
@@ -194,18 +166,35 @@
                             </VBox>
                         </VBox>
 
-                        <!-- Payment View -->
-                        <VBox fx:id="viewPayment" spacing="16" visible="false" managed="false">
-                            <Label text="Payment Methods" styleClass="section-title" />
-                            <Label text="Manage your saved payment options." styleClass="muted" />
-                            <Label text="Telebirr Account: 0911****89" styleClass="card-title" />
-                        </VBox>
-
                         <!-- Favorites View -->
                         <VBox fx:id="viewFavorites" spacing="16" visible="false" managed="false">
                             <Label text="Your Favorites" styleClass="section-title" />
                             <Label text="Quickly reorder your favorite meals." styleClass="muted" />
-                            <Label text="No favorites saved yet." styleClass="muted" />
+                            <javafx.scene.layout.FlowPane fx:id="favoritesContainer" hgap="12" vgap="12" />
+                        </VBox>
+
+                        <!-- Settings View -->
+                        <VBox fx:id="viewSettings" spacing="16" visible="false" managed="false">
+                            <Label text="Account Settings" styleClass="section-title" />
+                            
+                            <VBox spacing="10" styleClass="card">
+                                <Label text="Change Password" styleClass="card-title" />
+                                <VBox spacing="5">
+                                    <Label text="Current Password" />
+                                    <javafx.scene.control.PasswordField fx:id="currentPasswordField" styleClass="search"/>
+                                </VBox>
+                                <VBox spacing="5">
+                                    <Label text="New Password" />
+                                    <javafx.scene.control.PasswordField fx:id="newPasswordField" styleClass="search"/>
+                                </VBox>
+                                <Button text="Update Password" styleClass="primary-button" onAction="#updatePassword"/>
+                            </VBox>
+
+                            <VBox spacing="10" styleClass="card">
+                                <Label text="Preferences" styleClass="card-title" />
+                                <javafx.scene.control.CheckBox text="Receive Email Notifications" selected="true"/>
+                                <javafx.scene.control.CheckBox text="Receive SMS Notifications" />
+                            </VBox>
                         </VBox>
                     </StackPane>
                 </HBox>

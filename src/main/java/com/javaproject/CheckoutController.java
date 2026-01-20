@@ -69,6 +69,12 @@ public class CheckoutController {
     private VBox cashMessage;
 
     @FXML
+    private VBox telebirrContainer;
+
+    @FXML
+    private TextField telebirrMobileField;
+
+    @FXML
     private VBox addressContainer;
 
     @FXML
@@ -121,15 +127,58 @@ public class CheckoutController {
         });
 
         payGroup.selectedToggleProperty().addListener((obs, o, n) -> {
+            boolean isCash = payCash.isSelected();
+            boolean isTelebirr = payPaypal.isSelected();
+
             if (cashMessage != null) {
-                boolean isCash = payCash.isSelected();
                 cashMessage.setVisible(isCash);
                 cashMessage.setManaged(isCash);
             }
+            if (telebirrContainer != null) {
+                telebirrContainer.setVisible(isTelebirr);
+                telebirrContainer.setManaged(isTelebirr);
+            }
         });
+        
+        // Initial state update
+        boolean isCash = payCash.isSelected();
+        boolean isTelebirr = payPaypal.isSelected();
+        if (cashMessage != null) {
+            cashMessage.setVisible(isCash);
+            cashMessage.setManaged(isCash);
+        }
+        if (telebirrContainer != null) {
+            telebirrContainer.setVisible(isTelebirr);
+            telebirrContainer.setManaged(isTelebirr);
+        }
 
         refreshOrderList();
         refreshTotals();
+    }
+
+    @FXML
+    private void requestTelebirrUSSD() {
+        String mobile = telebirrMobileField.getText();
+        if (mobile == null || mobile.isBlank()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please enter your Telebirr mobile number.");
+            alert.show();
+            return;
+        }
+        if (!mobile.matches("\\d{9}")) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Please enter a valid 9-digit mobile number (e.g. 911223344).");
+            alert.show();
+            return;
+        }
+
+        // Simulate USSD Push
+        Alert loading = new Alert(Alert.AlertType.INFORMATION);
+        loading.setTitle("Telebirr Payment");
+        loading.setHeaderText("USSD Push Sent");
+        loading.setContentText("Please check your phone ("+mobile+") to enter your PIN and confirm the transaction...");
+        loading.showAndWait();
+        
+        // In a real app, we'd poll a backend status here. 
+        // For simulation, we assume success after they close the alert.
     }
 
     @FXML
@@ -164,7 +213,28 @@ public class CheckoutController {
 
     @FXML
     private void applyPromo() {
-        App.getState().setPromoCode(promoField.getText());
+        String code = promoField.getText();
+        if (code == null || code.isBlank()) {
+             return;
+        }
+        
+        // Validate against DB
+        var promoDao = new com.javaproject.db.PromoDao();
+        var discountOpt = promoDao.getDiscountPercent(code);
+        
+        if (discountOpt.isPresent()) {
+            App.getState().setPromoCode(code);
+            App.getState().setDiscountPercent(discountOpt.get());
+            
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Promo applied: " + discountOpt.get() + "% Off");
+            alert.show();
+        } else {
+            App.getState().setPromoCode(null);
+            App.getState().setDiscountPercent(0.0);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid Promo Code");
+            alert.show();
+        }
+        
         refreshTotals();
     }
 
@@ -183,7 +253,8 @@ public class CheckoutController {
 
         long orderId;
         try {
-            orderId = new OrderDao().createOrder(
+            orderId = invokeCreateOrder(
+                    new OrderDao(),
                     App.getState().getCurrentUser(),
                     java.util.List.copyOf(App.getState().getCartLines()),
                     App.getState().isDelivery(),
@@ -208,10 +279,35 @@ public class CheckoutController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Order Placed");
         alert.setHeaderText("Thanks for your order!");
-        alert.setContentText(String.format("Order #%d placed. Your total was $%.2f", orderId, total));
+        alert.setContentText(String.format("Order #%d placed. Your total was ETB %.2f", orderId, total));
         alert.showAndWait();
 
         App.setRoot("profile");
+    }
+
+    private long invokeCreateOrder(
+            OrderDao dao,
+            java.util.Optional<com.javaproject.auth.User> currentUser,
+            java.util.List<CartLine> cartLines,
+            boolean isDelivery,
+            String promoCode,
+            double subtotal,
+            double tax,
+            double deliveryFee,
+            double discount,
+            double total
+    ) throws Exception {
+        return dao.createOrder(
+                currentUser,
+                cartLines,
+                isDelivery,
+                promoCode,
+                subtotal,
+                tax,
+                deliveryFee,
+                discount,
+                total
+        );
     }
 
     private void refreshOrderList() {
@@ -239,7 +335,7 @@ public class CheckoutController {
         name.getStyleClass().add("order-item-title");
         Label subtitle = new Label("Customizations applied");
         subtitle.getStyleClass().add("muted");
-        Label price = new Label(String.format("$%.2f", line.getItem().getPrice()));
+        Label price = new Label(String.format("ETB %.2f", line.getItem().getPrice()));
         price.getStyleClass().add("order-item-price");
         texts.getChildren().addAll(name, subtitle, price);
 
@@ -268,14 +364,14 @@ public class CheckoutController {
         int count = App.getState().getCartLines().stream().mapToInt(CartLine::getQuantity).sum();
         cartCountLabel.setText(String.valueOf(count));
 
-        subtotalLabel.setText(String.format("$%.2f", App.getState().getSubtotal()));
-        deliveryFeeLabel.setText(String.format("$%.2f", App.getState().getDeliveryFee()));
-        taxLabel.setText(String.format("$%.2f", App.getState().getTax()));
+        subtotalLabel.setText(String.format("ETB %.2f", App.getState().getSubtotal()));
+        deliveryFeeLabel.setText(String.format("ETB %.2f", App.getState().getDeliveryFee()));
+        taxLabel.setText(String.format("ETB %.2f", App.getState().getTax()));
 
         double discount = App.getState().getDiscountAmount();
-        discountLabel.setText(discount <= 0.0 ? "$0.00" : String.format("-$%.2f", discount));
+        discountLabel.setText(discount <= 0.0 ? "ETB 0.00" : String.format("-ETB %.2f", discount));
 
-        totalLabel.setText(String.format("$%.2f", App.getState().getTotal()));
+        totalLabel.setText(String.format("ETB %.2f", App.getState().getTotal()));
 
         placeOrderButton.setDisable(App.getState().getCartLines().isEmpty());
     }

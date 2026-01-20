@@ -9,6 +9,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.PageController" styleClass="page">
 
@@ -20,7 +22,7 @@
             <left>
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="◆" styleClass="brand-mark" />
-                    <Label text="Gourmet Haven" styleClass="brand" />
+                    <Label text="Ethiopia" styleClass="brand" />
                     <Region prefWidth="20" />
                     <Button text="Home" styleClass="nav-link" onAction="#goToHome" />
                     <Button text="Menu" styleClass="nav-link" onAction="#goToMenu" />
@@ -48,11 +50,18 @@
                     <Label text="Our Location" styleClass="section-title" />
                     <Label text="Visit us at our flagship restaurant." wrapText="true" maxWidth="600" styleClass="muted" />
                     
-                    <Rectangle width="600" height="300" arcWidth="14" arcHeight="14" styleClass="map-rect" />
+                    <ImageView fitWidth="600" fitHeight="300" preserveRatio="false">
+                        <image>
+                            <Image url="@images/image.png"/>
+                        </image>
+                        <clip>
+                            <Rectangle width="600" height="300" arcWidth="14" arcHeight="14" />
+                        </clip>
+                    </ImageView>
                     
                     <VBox spacing="5" alignment="CENTER">
-                        <Label text="Gourmet Haven HQ" styleClass="kicker" />
-                        <Label text="123 Main Street, Addis Ababa" styleClass="muted" />
+                        <Label text="Head Quarters" styleClass="kicker" />
+                        <Label text="Arid Street, Mekelle City" styleClass="muted" />
                         <Label text="Open Daily: 10 AM - 11 PM" styleClass="muted" />
                     </VBox>
                 </VBox>

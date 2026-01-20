@@ -13,9 +13,34 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
-<?import java.lang.String?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.AdminDashboardController" styleClass="page">
+
+    <top>
+        <BorderPane styleClass="topbar">
+            <padding>
+                <Insets top="12" right="18" bottom="12" left="18" />
+            </padding>
+            <left>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="◆" styleClass="brand-mark" />
+                    <Label text="Ethiopia" styleClass="brand" />
+                    <Region prefWidth="20" />
+                    <Button text="Home" styleClass="nav-link" onAction="#goToHome" />
+                    <Button text="Menu" styleClass="nav-link" onAction="#goToMenu" />
+                    <Button text="About" styleClass="nav-link" onAction="#goToAbout" />
+                    <Button text="Contact" styleClass="nav-link" onAction="#goToContact" />
+                    <Button text="Location" styleClass="nav-link" onAction="#goToLocation" />
+                </HBox>
+            </left>
+            <right>
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="🛒" styleClass="icon-button" onAction="#goToCheckout" />
+                    <Button text="👤" styleClass="icon-button" onAction="#goToProfile" />
+                </HBox>
+            </right>
+        </BorderPane>
+    </top>
 
     <!-- Sidebar -->
     <left>
@@ -72,28 +97,18 @@
                             <HBox alignment="CENTER_LEFT" spacing="10">
                                 <Label text="Total Revenue" styleClass="stat-label" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label text="↗ 12%">
-                                    <styleClass>
-                                        <String fx:value="badge" />
-                                        <String fx:value="badge-success" />
-                                    </styleClass>
-                                </Label>
+                                <Label text="↗ 12%" styleClass="badge badge-success" />
                             </HBox>
-                            <Label text="\$1,240.50" styleClass="stat-value" />
+                            <Label fx:id="totalRevenueLabel" text="ETB 0.00" styleClass="stat-value" />
                         </VBox>
 
                         <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
                             <HBox alignment="CENTER_LEFT" spacing="10">
                                 <Label text="Total Orders" styleClass="stat-label" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label text="↗ 5%">
-                                    <styleClass>
-                                        <String fx:value="badge" />
-                                        <String fx:value="badge-success" />
-                                    </styleClass>
-                                </Label>
+                                <Label text="↗ 5%" styleClass="badge badge-success" />
                             </HBox>
-                            <Label text="45" styleClass="stat-value" />
+                            <Label fx:id="totalOrdersLabel" text="0" styleClass="stat-value" />
                         </VBox>
 
                         <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
@@ -102,7 +117,7 @@
                                 <Region HBox.hgrow="ALWAYS" />
                                 <Circle radius="4" fill="#f05a28" />
                             </HBox>
-                            <Label text="3" styleClass="stat-value" />
+                            <Label fx:id="pendingOrdersLabel" text="0" styleClass="stat-value" />
                             <Label text="NEEDS ATTENTION" styleClass="kicker" />
                         </VBox>
 
@@ -110,14 +125,9 @@
                             <HBox alignment="CENTER_LEFT" spacing="10">
                                 <Label text="Average Rating" styleClass="stat-label" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Label text="↗ 0.1">
-                                    <styleClass>
-                                        <String fx:value="badge" />
-                                        <String fx:value="badge-success" />
-                                    </styleClass>
-                                </Label>
+                                <Label text="↗ 0.1" styleClass="badge badge-success" />
                             </HBox>
-                            <Label text="4.8" styleClass="stat-value" />
+                            <Label fx:id="avgRatingLabel" text="0.0" styleClass="stat-value" />
                         </VBox>
                     </HBox>
 

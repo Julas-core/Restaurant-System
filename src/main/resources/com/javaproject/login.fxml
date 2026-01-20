@@ -17,10 +17,9 @@
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.LoginController" styleClass="page">
 
     <center>
-        <HBox prefHeight="720" prefWidth="1200">
+        <HBox alignment="CENTER">
             <!-- Left hero -->
-            <StackPane HBox.hgrow="ALWAYS" styleClass="auth-hero">
-                <Rectangle width="800" height="720" styleClass="auth-hero-rect" />
+            <StackPane HBox.hgrow="ALWAYS" styleClass="auth-hero" style="-fx-background-image: url('file:images/Doro_Wot_1768745545495.jpg'); -fx-background-size: cover; -fx-background-position: center; -fx-background-repeat: no-repeat;">
                 <VBox spacing="10" maxWidth="520" styleClass="auth-hero-copy">
                     <Label text="Master the Art of Dining" styleClass="auth-hero-title" />
                     <Label text="Sign in to manage your orders and access your account." styleClass="auth-hero-subtitle" wrapText="true" />
@@ -28,7 +27,7 @@
             </StackPane>
 
             <!-- Right form -->
-            <VBox spacing="14" prefWidth="520" styleClass="auth-panel">
+            <VBox spacing="14" prefWidth="520" styleClass="auth-panel" alignment="CENTER_LEFT">
                 <padding>
                     <Insets top="40" right="40" bottom="40" left="40" />
                 </padding>

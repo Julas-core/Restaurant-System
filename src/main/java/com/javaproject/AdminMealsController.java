@@ -1,14 +1,27 @@
 package com.javaproject;
 
+import com.javaproject.db.MenuItemDao;
+import com.javaproject.model.MenuItem;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Optional;
 
 public class AdminMealsController extends AdminBaseController {
 
@@ -35,6 +48,16 @@ public class AdminMealsController extends AdminBaseController {
                 btnEdit.getStyleClass().add("secondary-button");
                 btnDelete.getStyleClass().add("secondary-button");
                 btnDelete.setStyle("-fx-text-fill: red;");
+               
+                btnEdit.setOnAction(e -> {
+                    AdminMeal am = getTableView().getItems().get(getIndex());
+                    openEditMealDialog(am.getOriginalItem());
+                });
+                
+                btnDelete.setOnAction(e -> {
+                    AdminMeal am = getTableView().getItems().get(getIndex());
+                    deleteMeal(am.getOriginalItem());
+                });
             }
 
             @Override
@@ -48,33 +71,85 @@ public class AdminMealsController extends AdminBaseController {
             }
         });
 
-        ObservableList<AdminMeal> data = FXCollections.observableArrayList(
-            new AdminMeal("Spicy Chicken Sandwich", "Main Course", "$12.50", "Active"),
-            new AdminMeal("Caesar Salad", "Appetizer", "$8.00", "Active"),
-            new AdminMeal("Truffle Pasta", "Main Course", "$18.00", "Sold Out"),
-            new AdminMeal("Iced Lemon Tea", "Beverage", "$4.50", "Active"),
-            new AdminMeal("Chocolate Lava Cake", "Dessert", "$9.00", "Active")
-        );
+        loadMeals();
+    }
 
+    private void loadMeals() {
+        if (App.getState().getMenuItems() == null) return;
+        
+        ObservableList<AdminMeal> data = FXCollections.observableArrayList();
+        for (MenuItem item : App.getState().getMenuItems()) {
+            data.add(new AdminMeal(item));
+        }
         mealsTable.setItems(data);
+    }
+    
+    private void deleteMeal(MenuItem item) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete " + item.getName() + "?", ButtonType.YES, ButtonType.NO);
+        alert.setTitle("Confirm Delete");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.YES) {
+            try {
+                MenuItemDao dao = new MenuItemDao();
+                dao.deleteByName(item.getName());
+                // Refresh AppState
+                App.getState().setMenuItems(dao.listActive());
+                loadMeals();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    public void openAddMealDialog() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("admin_meal_add.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Add New Meal");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            
+            // Refresh table after dialog closes
+            loadMeals();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void openEditMealDialog(MenuItem item) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("admin_meal_add.fxml"));
+            Parent root = loader.load();
+            AdminAddMealController controller = loader.getController();
+            controller.setEditingMeal(item);
+            
+            Stage stage = new Stage();
+            stage.setTitle("Edit Meal");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            
+            // Refresh table after dialog closes
+            loadMeals();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static class AdminMeal {
-        private final String name;
-        private final String category;
-        private final String price;
-        private final String status;
-
-        public AdminMeal(String name, String category, String price, String status) {
-            this.name = name;
-            this.category = category;
-            this.price = price;
-            this.status = status;
+        private final MenuItem originalItem;
+        
+        public AdminMeal(MenuItem item) {
+            this.originalItem = item;
         }
 
-        public String getName() { return name; }
-        public String getCategory() { return category; }
-        public String getPrice() { return price; }
-        public String getStatus() { return status; }
+        public String getName() { return originalItem.getName(); }
+        public String getCategory() { return originalItem.getCategory(); }
+        public String getPrice() { return String.format("ETB %.2f", originalItem.getPrice()); }
+        public String getStatus() { return "Active"; }
+        public MenuItem getOriginalItem() { return originalItem; }
     }
 }

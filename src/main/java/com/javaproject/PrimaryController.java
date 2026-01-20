@@ -17,6 +17,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -233,25 +235,34 @@ public class PrimaryController {
             return true;
         }
 
-        List<Predicate<MenuItem>> preds = new ArrayList<>();
         if (chipVegetarian.isSelected()) {
-            preds.add(i -> "Vegetarian".equals(i.getLabel()));
-        }
-        if (chipVegan.isSelected()) {
-            preds.add(i -> "Vegan".equals(i.getLabel()));
-        }
-        if (chipGlutenFree.isSelected()) {
-            preds.add(i -> "Gluten-Free".equals(i.getLabel()));
-        }
-        if (chipSpicy.isSelected()) {
-            preds.add(i -> "Spicy".equals(i.getLabel()));
+            boolean isVeg = "Vegetarian".equalsIgnoreCase(item.getLabel()) 
+                         || (item.getDescription() != null && item.getDescription().toLowerCase(Locale.ROOT).contains("vegetarian"))
+                         || (item.getName() != null && item.getName().toLowerCase(Locale.ROOT).contains("vegetarian"));
+            if (!isVeg) return false;
         }
 
-        for (Predicate<MenuItem> p : preds) {
-            if (!p.test(item)) {
-                return false;
-            }
+        if (chipVegan.isSelected()) {
+            boolean isVegan = "Vegan".equalsIgnoreCase(item.getLabel())
+                           || (item.getDescription() != null && item.getDescription().toLowerCase(Locale.ROOT).contains("vegan"))
+                           || (item.getName() != null && item.getName().toLowerCase(Locale.ROOT).contains("vegan"));
+            if (!isVegan) return false;
         }
+
+        if (chipGlutenFree.isSelected()) {
+            boolean isGF = "Gluten-Free".equalsIgnoreCase(item.getLabel())
+                        || (item.getDescription() != null && item.getDescription().toLowerCase(Locale.ROOT).contains("gluten-free"))
+                        || (item.getName() != null && item.getName().toLowerCase(Locale.ROOT).contains("gluten-free"));
+            if (!isGF) return false;
+        }
+
+        if (chipSpicy.isSelected()) {
+            boolean isSpicy = "Spicy".equalsIgnoreCase(item.getLabel())
+                           || (item.getDescription() != null && item.getDescription().toLowerCase(Locale.ROOT).contains("spicy"))
+                           || (item.getName() != null && item.getName().toLowerCase(Locale.ROOT).contains("spicy"));
+            if (!isSpicy) return false;
+        }
+
         return true;
     }
 
@@ -269,21 +280,39 @@ public class PrimaryController {
         rect.setArcHeight(14);
         image.getChildren().add(rect);
 
-        Label labelPill = new Label(item.getLabel());
-        labelPill.getStyleClass().addAll("pill", pillClassFor(item.getLabel()));
-        StackPane.setMargin(labelPill, new Insets(8, 0, 0, 8));
-        image.getChildren().add(labelPill);
+        if (item.getImagePath() != null && !item.getImagePath().isBlank()) {
+            try {
+                 Region imageRegion = new Region();
+                 imageRegion.setPrefSize(190, 110);
+                 imageRegion.setMinSize(190, 110);
+                 imageRegion.setMaxSize(190, 110);
+                 
+                 // Rounded corners for the image region
+                 Rectangle clip = new Rectangle(190, 110);
+                 clip.setArcWidth(14);
+                 clip.setArcHeight(14);
+                 imageRegion.setClip(clip);
+                 
+                 // CSS for cover
+                 imageRegion.setStyle(
+                     "-fx-background-image: url('" + item.getImagePath().replace("'", "\\'") + "'); " +
+                     "-fx-background-size: cover; " +
+                     "-fx-background-position: center center;"
+                 );
+                 
+                image.getChildren().add(imageRegion);
+            } catch (Exception ignored) {
+                // If image load fails, just show the placeholder
+            }
+        }
 
-        HBox ratingBox = new HBox(4);
-        ratingBox.getStyleClass().add("rating-badge");
-        Label star = new Label("★");
-        star.getStyleClass().add("rating-star");
-        Label ratingValue = new Label(String.format("%.1f", item.getRating()));
-        ratingValue.getStyleClass().add("rating-value");
-        ratingBox.getChildren().addAll(star, ratingValue);
-        StackPane.setMargin(ratingBox, new Insets(8, 8, 0, 0));
-        StackPane.setAlignment(ratingBox, javafx.geometry.Pos.TOP_RIGHT);
-        image.getChildren().add(ratingBox);
+        if (item.getLabel() != null && !item.getLabel().isEmpty()) {
+            Label labelPill = new Label(item.getLabel());
+            labelPill.getStyleClass().addAll("pill", pillClassFor(item.getLabel()));
+            StackPane.setAlignment(labelPill, javafx.geometry.Pos.TOP_RIGHT);
+            StackPane.setMargin(labelPill, new Insets(8, 8, 0, 0));
+            image.getChildren().add(labelPill);
+        }
 
         Label name = new Label(item.getName());
         name.getStyleClass().add("menu-card-title");
@@ -292,7 +321,7 @@ public class PrimaryController {
         desc.getStyleClass().add("muted");
         desc.setWrapText(true);
 
-        Label price = new Label(String.format("$%.2f", item.getPrice()));
+        Label price = new Label(String.format("ETB %.2f", item.getPrice()));
         price.getStyleClass().add("menu-card-price");
 
         Button add = new Button("Add");

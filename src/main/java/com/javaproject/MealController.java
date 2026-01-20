@@ -7,6 +7,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +20,9 @@ public class MealController {
 
     @FXML
     private Label titleLabel;
+
+    @FXML
+    private StackPane mealImageContainer;
 
     @FXML
     private Label priceLabel;
@@ -56,10 +63,57 @@ public class MealController {
     @FXML
     private Label bottomTotalPriceLabel;
 
+    @FXML
+    private javafx.scene.control.Button btnFavorite;
+
     private final ToggleGroup sizeGroup = new ToggleGroup();
 
     private MenuItem baseItem;
     private int quantity = 1;
+    private boolean isFavorite = false;
+
+    @FXML
+    public void goToReview() throws IOException {
+        App.setRoot("feedback");
+    }
+
+    @FXML
+    public void toggleFavorite() {
+        if (!App.getState().isAuthenticated()) {
+            return; // Or prompt login
+        }
+        var user = App.getState().getCurrentUser().get();
+        // Ensure item has ID. If it's a static item not in DB, we can't fave it easily unless we insert it.
+        // Assuming all displayed items are from DB.
+        if (baseItem.getId() == null) {
+            return;
+        }
+
+        try {
+            com.javaproject.db.FavoriteDao dao = new com.javaproject.db.FavoriteDao();
+            if (isFavorite) {
+                dao.removeFavorite(user.getId(), baseItem.getId());
+                isFavorite = false;
+            } else {
+                dao.addFavorite(user.getId(), baseItem.getId());
+                isFavorite = true;
+            }
+            updateFavoriteBtn();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateFavoriteBtn() {
+        if (btnFavorite == null) return;
+        if (isFavorite) {
+            btnFavorite.setText("♥");
+            btnFavorite.setStyle("-fx-text-fill: #e02424; -fx-font-size: 20px;");
+        } else {
+            btnFavorite.setText("♡");
+            btnFavorite.setStyle("-fx-text-fill: black; -fx-font-size: 20px;");
+        }
+    }
 
     @FXML
     public void initialize() {
@@ -72,6 +126,17 @@ public class MealController {
             }
             return;
         }
+        
+        // Check favorite status
+        if (App.getState().isAuthenticated() && baseItem.getId() != null) {
+            try {
+                com.javaproject.db.FavoriteDao dao = new com.javaproject.db.FavoriteDao();
+                isFavorite = dao.isFavorite(App.getState().getCurrentUser().get().getId(), baseItem.getId());
+                updateFavoriteBtn();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         sizeRegular.setToggleGroup(sizeGroup);
         sizeLarge.setToggleGroup(sizeGroup);
@@ -79,6 +144,27 @@ public class MealController {
 
         titleLabel.setText(baseItem.getName());
         descriptionLabel.setText(baseItem.getDescription());
+
+        // Load image if available
+        if (mealImageContainer != null) {
+            // Apply clip for rounded corners
+            Rectangle clip = new Rectangle(520, 320);
+            clip.setArcWidth(16);
+            clip.setArcHeight(16);
+            mealImageContainer.setClip(clip);
+
+            if (baseItem.getImagePath() != null && !baseItem.getImagePath().isBlank()) {
+                try {
+                    mealImageContainer.setStyle(
+                        "-fx-background-image: url('" + baseItem.getImagePath().replace("'", "\\'") + "'); " +
+                        "-fx-background-size: cover; " +
+                        "-fx-background-position: center center;"
+                    );
+                } catch (Exception e) {
+                    // ignore load failure
+                }
+            }
+        }
 
         // For the screenshot-style UI, show a fixed review count (beginner-friendly).
         ratingLabel.setText(String.format("%.1f", baseItem.getRating()));
@@ -146,9 +232,9 @@ public class MealController {
         }
 
         double unit = computeUnitPrice();
-        priceLabel.setText(String.format("$%.2f", unit));
-        bottomUnitPriceLabel.setText(String.format("$%.2f", unit));
-        bottomTotalPriceLabel.setText(String.format("$%.2f", unit * quantity));
+        priceLabel.setText(String.format("ETB %.2f", unit));
+        bottomUnitPriceLabel.setText(String.format("ETB %.2f", unit));
+        bottomTotalPriceLabel.setText(String.format("ETB %.2f", unit * quantity));
     }
 
     private double computeUnitPrice() {

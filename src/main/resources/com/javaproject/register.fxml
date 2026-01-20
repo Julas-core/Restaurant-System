@@ -19,8 +19,7 @@
     <center>
         <HBox prefHeight="720" prefWidth="1200">
             <!-- Left hero -->
-            <StackPane HBox.hgrow="ALWAYS" styleClass="auth-hero">
-                <Rectangle width="800" height="720" styleClass="auth-hero-rect" />
+            <StackPane HBox.hgrow="ALWAYS" styleClass="auth-hero" style="-fx-background-image: url('file:images/Beyaynetu_1768808217373.jpg'); -fx-background-size: cover; -fx-background-position: center; -fx-background-repeat: no-repeat;">
                 <VBox spacing="10" maxWidth="520" styleClass="auth-hero-copy">
                     <Label text="Experience taste like never before." styleClass="auth-hero-title" />
                     <Label text="Create your account to start your journey." styleClass="auth-hero-subtitle" wrapText="true" />

@@ -21,7 +21,7 @@
             <left>
                 <HBox spacing="10" alignment="CENTER_LEFT">
                     <Label text="◆" styleClass="brand-mark" />
-                    <Label text="Gourmet Haven" styleClass="brand" />
+                    <Label text="Ethiopia" styleClass="brand" />
                     <Region prefWidth="20" />
                     <Button text="Home" styleClass="nav-link" onAction="#goToHome" />
                     <Button text="Menu" styleClass="nav-link" onAction="#goToMenu" />

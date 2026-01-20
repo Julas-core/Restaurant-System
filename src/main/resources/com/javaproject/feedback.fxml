@@ -46,7 +46,7 @@
 
                     <!-- Left image panel -->
                     <StackPane prefWidth="360" styleClass="feedback-left">
-                        <Rectangle width="360" height="520" arcWidth="18" arcHeight="18" styleClass="feedback-image" />
+                        <Rectangle fx:id="feedbackImageRect" width="360" height="520" arcWidth="18" arcHeight="18" styleClass="feedback-image" />
                         <VBox spacing="10" StackPane.alignment="TOP_LEFT">
                             <Button text="← Back to Orders" onAction="#goBackToOrders" styleClass="link-button" />
                         </VBox>
@@ -67,31 +67,31 @@
                         <HBox spacing="10" styleClass="card">
                             <Rectangle width="36" height="36" arcWidth="18" arcHeight="18" styleClass="avatar" />
                             <VBox spacing="2">
-                                <Label text="Order #1234 • Oct 24, 2023" styleClass="card-title" />
-                                <Label text="Spicy Ramen, Gyoza, Green Tea" styleClass="muted" />
+                                <Label fx:id="contextTitle" text="General Feedback" styleClass="card-title" />
+                                <Label fx:id="contextSubtitle" text="Let us know how we are doing" styleClass="muted" />
                             </VBox>
                         </HBox>
 
                         <Label text="OVERALL RATING" styleClass="kicker" />
-                        <HBox spacing="10">
-                            <Label text="☆" styleClass="star" />
-                            <Label text="☆" styleClass="star" />
-                            <Label text="☆" styleClass="star" />
-                            <Label text="☆" styleClass="star" />
-                            <Label text="☆" styleClass="star" />
+                        <HBox spacing="10" fx:id="starsContainer">
+                            <Label fx:id="star1" text="☆" styleClass="star" onMouseClicked="#handleRating" />
+                            <Label fx:id="star2" text="☆" styleClass="star" onMouseClicked="#handleRating" />
+                            <Label fx:id="star3" text="☆" styleClass="star" onMouseClicked="#handleRating" />
+                            <Label fx:id="star4" text="☆" styleClass="star" onMouseClicked="#handleRating" />
+                            <Label fx:id="star5" text="☆" styleClass="star" onMouseClicked="#handleRating" />
                         </HBox>
 
-                        <Label text="WHAT MADE IT GREAT?" styleClass="kicker" />
-                        <HBox spacing="10">
-                            <Label text="Taste" styleClass="chip chip-selected" />
+                        <Label fx:id="tagsLabel" text="WHAT MADE IT GREAT?" styleClass="kicker" />
+                        <HBox spacing="10" fx:id="tagsContainer">
+                            <Label text="Taste" styleClass="chip" />
                             <Label text="Delivery Speed" styleClass="chip" />
                             <Label text="Packaging" styleClass="chip" />
                             <Label text="Portion Size" styleClass="chip" />
                             <Label text="Temperature" styleClass="chip" />
                         </HBox>
-
+                        
                         <Label text="SHARE YOUR THOUGHTS" styleClass="kicker" />
-                        <TextArea promptText="The broth was incredible, but the noodles were a bit..." prefRowCount="4" wrapText="true" />
+                        <TextArea fx:id="commentArea" promptText="The broth was incredible, but the noodles were a bit..." prefRowCount="4" wrapText="true" />
 
                         <Label text="ADD PHOTOS" styleClass="kicker" />
                         <StackPane styleClass="upload">

@@ -41,7 +41,18 @@ public final class SchemaInitializer {
                     "label TEXT NOT NULL DEFAULT ''," +
                     "rating NUMERIC(3,2) NOT NULL DEFAULT 0," +
                     "chef_special BOOLEAN NOT NULL DEFAULT FALSE," +
-                    "active BOOLEAN NOT NULL DEFAULT TRUE" +
+                    "active BOOLEAN NOT NULL DEFAULT TRUE," +
+                    "image_path TEXT NOT NULL DEFAULT ''" +
+                    ")");
+            
+            // Add image_path column if it doesn't exist (for existing databases)
+            s.execute("ALTER TABLE menu_items ADD COLUMN IF NOT EXISTS image_path TEXT NOT NULL DEFAULT ''");
+
+            s.execute("CREATE TABLE IF NOT EXISTS favorites (" +
+                    "user_id BIGINT REFERENCES users(id) ON DELETE CASCADE," +
+                    "menu_item_id BIGINT REFERENCES menu_items(id) ON DELETE CASCADE," +
+                    "created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()," +
+                    "PRIMARY KEY (user_id, menu_item_id)" +
                     ")");
 
             s.execute("CREATE TABLE IF NOT EXISTS orders (" +
@@ -67,6 +78,51 @@ public final class SchemaInitializer {
                     "quantity INT NOT NULL," +
                     "notes TEXT NOT NULL DEFAULT ''" +
                     ")");
+
+            s.execute("CREATE TABLE IF NOT EXISTS feedback (" +
+                    "id BIGSERIAL PRIMARY KEY," +
+                    "user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE," +
+                    "rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5)," +
+                    "comment TEXT NOT NULL DEFAULT ''," +
+                    "created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()" +
+                    ")");
+            
+            // Add columns for reply/archive if they don't exist
+            s.execute("ALTER TABLE feedback ADD COLUMN IF NOT EXISTS admin_reply TEXT NULL");
+            s.execute("ALTER TABLE feedback ADD COLUMN IF NOT EXISTS archived BOOLEAN NOT NULL DEFAULT FALSE");
+            s.execute("ALTER TABLE feedback ADD COLUMN IF NOT EXISTS menu_item_id BIGINT NULL REFERENCES menu_items(id) ON DELETE CASCADE");
+            s.execute("ALTER TABLE feedback ADD COLUMN IF NOT EXISTS tags TEXT NULL");
+
+            s.execute("CREATE TABLE IF NOT EXISTS coupons (" +
+                    "id BIGSERIAL PRIMARY KEY," +
+                    "code TEXT NOT NULL UNIQUE," +
+                    "discount_percent NUMERIC(5,2) NOT NULL," +
+                    "active BOOLEAN NOT NULL DEFAULT TRUE," +
+                    "expires_at TIMESTAMPTZ NULL" +
+                    ")");
+
+            s.execute("CREATE TABLE IF NOT EXISTS system_config (" +
+                    "key TEXT PRIMARY KEY," +
+                    "value TEXT NOT NULL" +
+                    ")");
+
+            // Seed default config if empty
+            try (var rs = s.executeQuery("SELECT count(*) FROM system_config")) {
+                if (rs.next() && rs.getInt(1) == 0) {
+                     s.execute("INSERT INTO system_config (key, value) VALUES ('TAX_RATE', '15.0')");
+                     s.execute("INSERT INTO system_config (key, value) VALUES ('DELIVERY_FEE', '50.0')");
+                }
+            }
+            
+            // Seed a welcome coupon if table is empty
+            
+            // Seed a welcome coupon if table is empty
+            try (var rs = s.executeQuery("SELECT count(*) FROM coupons")) {
+                if (rs.next() && rs.getInt(1) == 0) {
+                     s.execute("INSERT INTO coupons (code, discount_percent) VALUES ('WELCOME10', 10.0)");
+                     s.execute("INSERT INTO coupons (code, discount_percent) VALUES ('GOURMET20', 20.0)");
+                }
+            }
         }
     }
 }

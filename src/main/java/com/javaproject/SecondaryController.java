@@ -45,14 +45,14 @@ public class SecondaryController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Order Placed");
         alert.setHeaderText("Thanks for your order!");
-        alert.setContentText(String.format("Your total was $%.2f", total));
+        alert.setContentText(String.format("Your total was ETB %.2f", total));
         alert.showAndWait();
 
         App.setRoot("primary");
     }
 
     private void updateTotal() {
-        checkoutTotalLabel.setText(String.format("Total: $%.2f", App.getState().getCartTotal()));
+        checkoutTotalLabel.setText(String.format("Total: ETB %.2f", App.getState().getCartTotal()));
     }
 
     @FXML

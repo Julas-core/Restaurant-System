@@ -18,7 +18,7 @@
         <ListView fx:id="orderSummaryListView" />
 
         <HBox spacing="10">
-            <Label fx:id="checkoutTotalLabel" text="Total: $0.00" />
+            <Label fx:id="checkoutTotalLabel" text="Total: ETB 0.00" />
         </HBox>
 
         <HBox spacing="10">

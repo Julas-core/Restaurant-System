@@ -1,5 +1,7 @@
 package com.javaproject;
 
+import com.javaproject.db.OrderDao;
+import com.javaproject.db.FeedbackDao;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
@@ -9,6 +11,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+
+import java.util.Map;
 
 public class AdminDashboardController extends AdminBaseController {
 
@@ -20,41 +24,103 @@ public class AdminDashboardController extends AdminBaseController {
 
     @FXML
     private VBox recentFeedbackBox;
+    
+    @FXML private Label totalRevenueLabel;
+    @FXML private Label totalOrdersLabel;
+    @FXML private Label pendingOrdersLabel;
+    @FXML private Label avgRatingLabel;
+
+    private OrderDao orderDao;
+    private FeedbackDao feedbackDao;
 
     @FXML
     public void initialize() {
-        setupChart();
-        setupPopularItems();
-        setupRecentFeedback();
+        try {
+            orderDao = new OrderDao();
+            feedbackDao = new FeedbackDao(); 
+            setupStats();
+            setupChart();
+            setupPopularItems();
+            setupRecentFeedback();
+        } catch (Throwable e) {
+            System.err.println("Failed to initialize Admin Dashboard:");
+            e.printStackTrace();
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+            alert.setTitle("Dashboard Error");
+            alert.setHeaderText("Failed to load dashboard data");
+            alert.setContentText(e.getMessage());
+            alert.show();
+        }
     }
 
     private void setupChart() {
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Revenue");
-        series.getData().add(new XYChart.Data<>("Mon", 1200));
-        series.getData().add(new XYChart.Data<>("Tue", 1500));
-        series.getData().add(new XYChart.Data<>("Wed", 1100));
-        series.getData().add(new XYChart.Data<>("Thu", 1800));
-        series.getData().add(new XYChart.Data<>("Fri", 2400));
-        series.getData().add(new XYChart.Data<>("Sat", 3000));
-        series.getData().add(new XYChart.Data<>("Sun", 2800));
+        
+        var weeklyData = orderDao.getWeeklyRevenue();
+        if (weeklyData.isEmpty()) {
+            series.getData().add(new XYChart.Data<>("Today", 0));
+        } else {
+            for (Map.Entry<String, Double> entry : weeklyData) {
+                series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+            }
+        }
+        
+        revenueChart.getData().clear();
         revenueChart.getData().add(series);
+    }
+    
+    private void setupStats() {
+        double revenue = orderDao.getTotalRevenue();
+        int orders = orderDao.getTotalOrdersCount();
+        int pending = orderDao.getOrdersCountByStatus("PENDING");
+        double rating = feedbackDao.getAverageRating();
+        
+        if (totalRevenueLabel != null) totalRevenueLabel.setText(String.format("ETB %.2f", revenue));
+        if (totalOrdersLabel != null) totalOrdersLabel.setText(String.valueOf(orders));
+        if (pendingOrdersLabel != null) pendingOrdersLabel.setText(String.valueOf(pending));
+        if (avgRatingLabel != null) avgRatingLabel.setText(String.format("%.1f", rating));
     }
 
     private void setupPopularItems() {
-        popularItemsBox.getChildren().addAll(
-            createItemRow("Spicy Chicken Sandwich", "124 orders", "$12.50"),
-            createItemRow("Truffle Pasta", "98 orders", "$18.00"),
-            createItemRow("Caesar Salad", "85 orders", "$8.00")
-        );
+        popularItemsBox.getChildren().clear();
+        var items = orderDao.getTopSellingItems();
+        
+        if (items.isEmpty()) {
+             Label empty = new Label("No sales data yet.");
+             empty.getStyleClass().add("muted");
+             popularItemsBox.getChildren().add(empty);
+             return;
+        }
+
+        for (Map.Entry<String, Integer> item : items) {
+            // Price is unknowable here efficiently without another join, 
+            // so we'll just show "Hot" or remove the price label for dashboard summary
+            popularItemsBox.getChildren().add(
+                createItemRow(item.getKey(), item.getValue() + " sold", "HOT")
+            );
+        }
     }
 
     private void setupRecentFeedback() {
-        recentFeedbackBox.getChildren().addAll(
-            createFeedbackRow("Alice Johnson", "The pasta was absolutely amazing!", 5),
-            createFeedbackRow("Mark Smith", "Music was a bit loud.", 3),
-            createFeedbackRow("Sarah Lee", "Best cheesecake in town!", 5)
-        );
+        recentFeedbackBox.getChildren().clear();
+        var feedbacks = feedbackDao.getAllFeedback();
+        // Limit to 4 for dashboard
+        int limit = Math.min(feedbacks.size(), 4);
+        
+        if (limit == 0) {
+             Label empty = new Label("No feedback yet.");
+             empty.getStyleClass().add("muted");
+             recentFeedbackBox.getChildren().add(empty);
+             return;
+        }
+
+        for (int i = 0; i < limit; i++) {
+            var f = feedbacks.get(i);
+            recentFeedbackBox.getChildren().add(
+                createFeedbackRow(f.getUserName(), f.getComment(), f.getRating())
+            );
+        }
     }
 
     private HBox createItemRow(String name, String count, String price) {

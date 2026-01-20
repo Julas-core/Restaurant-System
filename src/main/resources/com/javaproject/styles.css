@@ -307,6 +307,7 @@
 
 .hero-rect {
     -fx-fill: #2d2a28;
+    -fx-background-color: #2d2a28;
 }
 
 .hero-overlay {

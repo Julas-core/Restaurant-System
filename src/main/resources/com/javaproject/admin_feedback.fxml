@@ -14,6 +14,32 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.AdminFeedbackController" styleClass="page">
 
+    <top>
+        <BorderPane styleClass="topbar">
+            <padding>
+                <Insets top="12" right="18" bottom="12" left="18" />
+            </padding>
+            <left>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="◆" styleClass="brand-mark" />
+                    <Label text="Ethiopia" styleClass="brand" />
+                    <Region prefWidth="20" />
+                    <Button text="Home" styleClass="nav-link" onAction="#goToHome" />
+                    <Button text="Menu" styleClass="nav-link" onAction="#goToMenu" />
+                    <Button text="About" styleClass="nav-link" onAction="#goToAbout" />
+                    <Button text="Contact" styleClass="nav-link" onAction="#goToContact" />
+                    <Button text="Location" styleClass="nav-link" onAction="#goToLocation" />
+                </HBox>
+            </left>
+            <right>
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="🛒" styleClass="icon-button" onAction="#goToCheckout" />
+                    <Button text="👤" styleClass="icon-button" onAction="#goToProfile" />
+                </HBox>
+            </right>
+        </BorderPane>
+    </top>
+
     <!-- Sidebar -->
     <left>
         <VBox spacing="5" prefWidth="250" styleClass="sidebar">
@@ -69,7 +95,7 @@
                                 <Region HBox.hgrow="ALWAYS" />
                                 <Label text="★" style="-fx-text-fill: #ffc107;" />
                             </HBox>
-                            <Label text="4.8 / 5.0" styleClass="stat-value" />
+                            <Label fx:id="avgRatingLabel" text="0.0 / 5.0" styleClass="stat-value" />
                             <Label text="↗ +0.2% vs last month">
                                 <styleClass>
                                     <String fx:value="badge" />
@@ -83,7 +109,7 @@
                                 <Region HBox.hgrow="ALWAYS" />
                                 <Label text="✉" style="-fx-text-fill: #f05a28;" />
                             </HBox>
-                            <Label text="12" styleClass="stat-value" />
+                            <Label fx:id="unreadReviewsLabel" text="0" styleClass="stat-value" />
                             <Label text="Action Required">
                                 <styleClass>
                                     <String fx:value="badge" />
@@ -97,7 +123,7 @@
                                 <Region HBox.hgrow="ALWAYS" />
                                 <Label text="💬" style="-fx-text-fill: #0d6efd;" />
                             </HBox>
-                            <Label text="1,240" styleClass="stat-value" />
+                            <Label fx:id="totalFeedbackLabel" text="0" styleClass="stat-value" />
                             <Label text="↗ +12% new reviews">
                                 <styleClass>
                                     <String fx:value="badge" />

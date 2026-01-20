@@ -15,6 +15,32 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.javaproject.AdminOrdersController" styleClass="page">
 
+    <top>
+        <BorderPane styleClass="topbar">
+            <padding>
+                <Insets top="12" right="18" bottom="12" left="18" />
+            </padding>
+            <left>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="◆" styleClass="brand-mark" />
+                    <Label text="Ethiopia" styleClass="brand" />
+                    <Region prefWidth="20" />
+                    <Button text="Home" styleClass="nav-link" onAction="#goToHome" />
+                    <Button text="Menu" styleClass="nav-link" onAction="#goToMenu" />
+                    <Button text="About" styleClass="nav-link" onAction="#goToAbout" />
+                    <Button text="Contact" styleClass="nav-link" onAction="#goToContact" />
+                    <Button text="Location" styleClass="nav-link" onAction="#goToLocation" />
+                </HBox>
+            </left>
+            <right>
+                <HBox spacing="10" alignment="CENTER_RIGHT">
+                    <Button text="🛒" styleClass="icon-button" onAction="#goToCheckout" />
+                    <Button text="👤" styleClass="icon-button" onAction="#goToProfile" />
+                </HBox>
+            </right>
+        </BorderPane>
+    </top>
+
     <!-- Sidebar -->
     <left>
         <VBox spacing="5" prefWidth="250" styleClass="sidebar">
@@ -68,34 +94,32 @@
                     <HBox spacing="20">
                         <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
                             <Label text="Pending Orders" styleClass="stat-label" />
-                            <Label text="12" styleClass="stat-value" />
+                            <Label fx:id="pendingOrdersLabel" text="0" styleClass="stat-value" />
                             <Label text="↑ 2 since 5m" styleClass="kicker" />
                         </VBox>
                         <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
                             <Label text="In Kitchen" styleClass="stat-label" />
-                            <Label text="5" styleClass="stat-value" />
+                            <Label fx:id="inKitchenLabel" text="0" styleClass="stat-value" />
                             <Label text="Avg time: 12m" styleClass="muted" />
                         </VBox>
                         <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
                             <Label text="Ready for Pickup" styleClass="stat-label" />
-                            <Label text="3" styleClass="stat-value" />
+                            <Label fx:id="readyLabel" text="0" styleClass="stat-value" />
                         </VBox>
                         <VBox styleClass="stat-card" HBox.hgrow="ALWAYS" style="-fx-background-color: #0d6efd;">
                             <Label text="Total Revenue Today" styleClass="stat-label" style="-fx-text-fill: white;" />
-                            <Label text="\$1,240.50" styleClass="stat-value" style="-fx-text-fill: white;" />
+                            <Label fx:id="revenueTodayLabel" text="ETB 0.00" styleClass="stat-value" style="-fx-text-fill: white;" />
                             <Label text="↗ +12% from yesterday" style="-fx-text-fill: #e0e0e0; -fx-font-size: 11px;" />
                         </VBox>
                     </HBox>
 
                     <!-- Filters -->
                     <HBox spacing="15" alignment="CENTER_LEFT" styleClass="card">
-                        <TextField promptText="Search by Order ID..." styleClass="search" />
-                        <Region HBox.hgrow="ALWAYS" />
-                        <Button text="All Orders" styleClass="secondary-button" style="-fx-background-color: #333; -fx-text-fill: white;" />
-                        <Button text="Pending" styleClass="secondary-button" />
-                        <Button text="Preparing" styleClass="secondary-button" />
-                        <Button text="Ready" styleClass="secondary-button" />
-                        <Button text="Completed" styleClass="secondary-button" />
+                        <TextField fx:id="searchField" promptText="Search by Order ID or User..." styleClass="search" onKeyReleased="#handleSearch" HBox.hgrow="ALWAYS"/>
+                        <Region prefWidth="20" />
+                        <Label text="Filter Status:" styleClass="muted" />
+                        <javafx.scene.control.ComboBox fx:id="statusFilterBox" onAction="#handleFilter" prefWidth="150" />
+                        <Button text="Reset" onAction="#resetFilters" styleClass="link-button" />
                     </HBox>
 
                     <!-- Table -->
