@@ -128,7 +128,7 @@ Restaurant-System/
 1. **Security: hardcoded DB credentials and demo users**
    - `DbConfig` includes embedded defaults for URL/user/password.
    - Seeded demo credentials are static and predictable.
-2. **Critical Security: role escalation path (immediate fix required)**
+2. **Critical Security: role escalation path (immediate fix required).**
    - Registration flow allows selecting admin role from UI.
 3. **Operational maturity**
    - No automated test suite (`src/test` is absent).
