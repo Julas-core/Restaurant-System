@@ -87,11 +87,12 @@ Database config is read from environment variables (with internal defaults in co
 If not set, the app currently defaults to local values in `DbConfig`.
 
 ## Default Seed Accounts
-When schema seeding runs and users do not already exist:
-- Admin: `admin / admin123`
-- User: `user / user123`
+This project seeds demo accounts when the database is empty.
 
-> Recommended for production: rotate/remove demo credentials and disable permissive role creation paths.
+For safety, explicit credentials are intentionally not documented here.  
+Inspect the seed/auth code paths if you need to change or remove demo-user behavior for your environment.
+
+> Recommended for production: remove demo users entirely and require environment-specific bootstrap logic.
 
 ## Project Structure
 ```text
@@ -127,7 +128,7 @@ Restaurant-System/
 1. **Security: hardcoded DB credentials and demo users**
    - `DbConfig` includes embedded defaults for URL/user/password.
    - Seeded demo credentials are static and predictable.
-2. **Security: role escalation path**
+2. **Critical Security: role escalation path (immediate fix required)**
    - Registration flow allows selecting admin role from UI.
 3. **Operational maturity**
    - No automated test suite (`src/test` is absent).
@@ -157,4 +158,3 @@ Restaurant-System/
 - **Cannot connect to DB**: verify `DB_URL`, `DB_USER`, `DB_PASSWORD`, and PostgreSQL availability.
 - **JavaFX run issues**: confirm JDK 21 and run `mvn -v` to check active Java version.
 - **Blank/partial data**: schema and seed run at startup; check DB permissions and startup logs.
-
